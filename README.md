@@ -41,3 +41,11 @@ Critical dependencies:
 ```
 
 This is expected due to the way Altspace is published to npm and will be fixed in the future.
+
+
+## ToDo
+
+1. create gulp file to automate build with webpack and watch for Changes
+2. Create main.jsx component
+3. link npm task to gulp task
+4. Run it

@@ -1,6 +1,6 @@
 module.exports = {
   entry: [
-    './src/index.js'
+    './src/main.jsx'
   ],
   output: {
     path: __dirname,
@@ -19,9 +19,5 @@ module.exports = {
   ]},
   resolve: {
     extensions: ['', '.js', '.jsx', '.css']
-  },
-  devServer: {
-    historyApiFallback: true,
-    contentBase: './'
   }
 }
