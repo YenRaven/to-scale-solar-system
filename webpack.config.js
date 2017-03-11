@@ -17,6 +17,9 @@ module.exports = {
       loader: 'style!css'
     }
   ]},
+  devtool:[
+      "source-map"
+  ],
   resolve: {
     extensions: ['', '.js', '.jsx', '.css']
   }
