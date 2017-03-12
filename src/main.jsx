@@ -1,78 +1,65 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-class Particle extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            m: Math.random() * this.props.r,
-            o: Math.random() * this.props.r
-        }
-    }
-
-    render() {
-        var i = this.props.c * this.state.m + this.state.o;
-        var x = Math.sin(i) * this.props.scaleX;
-        var y = Math.cos(i+this.state.m) * this.props.scaleY;
-        var z = Math.cos(i) * this.props.scaleZ;
-        return <a-sphere
-            position={`${x} ${y} ${z}`}
-            radius={this.props.radius}
-            color={this.props.color}
-            segments-height={this.props.segments}
-            segments-width={this.props.segments}
-        ></a-sphere>
-    }
-}
+import * as Bodies from './bodies.jsx';
 
 class Main extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             calcBase: 0,
-            particleCount: 200,
-            segments: 1,
-            particleSize: 0.01,
-            radius: 0.5
+            selected: "earth",
+            scale: 0.00001,
+            orbitalScale: 0.001
         }
     }
-  render() {
-      var particles = []
-      for(var i=0; i<this.state.particleCount; i++){
-          particles.push(
-              <Particle
-                  key={i}
-                  c={this.state.calcBase}
-                  radius={this.state.particleSize}
-                  color="#FF0000"
-                  segments={this.state.segments}
-                  scaleX={this.state.radius}
-                  scaleY={this.state.radius * 2}
-                  scaleZ={this.state.radius}
-                  r={50}
-              />
-          )
-      }
-    return (
-        <a-entity position="0 1.5 0">
-            {particles}
-        </a-entity>
-    )
-  }
+    render() {
+        let {
+            Sun,
+            Mercury, Venus, Earth, Mars, Juipter, Saturn, Uranus, Neptune
+        } = Bodies;
+        let scaleProps = {
+                calcBase: this.state.calcBase,
+                scale: this.state.scale,
+                orbitalScale: this.state.orbitalScale
+        }
+        let bodyProps = {
+            ...scaleProps,
+            now: this.state.calcBase,
+            parentRadius: 695700
+        };
+        return (
+            <a-entity position="0 1.5 -10" ref="sys">
+                <Sun texture="#sun" now={this.state.calcBase} ref="sun" {...scaleProps} />
+                <Mercury texture="#mercury" {...bodyProps} ref="mercury" />
+                <Venus texture="#venus" {...bodyProps} ref="venus" />
+                <Earth texture="#earth" {...bodyProps} ref="earth" />
+                <Mars texture="#mars" {...bodyProps} ref="mars" />
+                <Juipter texture="#juipter" {...bodyProps} ref="juipter" />
+                <Saturn texture="#saturn" {...bodyProps} ref="saturn" />
+                <Uranus texture="#uranus" {...bodyProps} ref="uranus" />
+                <Neptune texture="#neptune" {...bodyProps} ref="neptune" />
+            </a-entity>
+        )
+    }
 
-  componentDidMount(){
+    componentDidUpdate(){
+        let pos = this.refs[this.state.selected].refs.body.refs.geom.getAttribute("position");
+        this.refs.sys.setAttribute("position", `${-pos.x} 1.5 ${-pos.z}`);
+    }
+
+    componentDidMount(){
       setInterval(()=>{
           this.setState((state) => {
               return {
                   ...state,
-                  calcBase:state.calcBase+0.001
+                  calcBase:state.calcBase+0.01
               }
           });
       }, 10)
-  }
+    }
 }
 
 ReactDOM.render(
     <Main />,
-    document.getElementById('appMain')
+    document.getElementById("appMain")
 );
