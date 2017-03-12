@@ -11,7 +11,7 @@ function build(){
 }
 
 function html(){
-    return gulp.src('src/*.html')
+    return gulp.src(['src/*.html', 'src/*.js'])
         .pipe(gulp.dest('dist/'));
 }
 
