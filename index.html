@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  </head>
-  <body>
-    <div class="container"></div>
-  </body>
-  <script src="bundle.js"></script>
-</html>
+<head>
+    <script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/AltspaceVR/aframe-altspace-component/master/dist/aframe-altspace-component.js"></script>
+    <script src="./dist/altspace.min.js"></script>
+</head>
+<body>
+    <a-scene altspace='vertical-align: bottom; fullspace: true;' sync-system='app: myapp; author: name'>
+        <a-assets>
+            <img id="sky" src="./dist/assets/eso0932a.jpg" />
+            <img id="sun" src="./dist/assets/sun.jpg" />
+            <img id="mercury" src="./dist/assets/mercury.jpg" />
+            <img id="venus" src="./dist/assets/venus.jpg" />
+            <img id="earth" src="./dist/assets/earth.jpg" />
+            <img id="mars" src="./dist/assets/mars.jpg" />
+            <img id="juipter" src="./dist/assets/juipter.jpg" />
+            <img id="saturn" src="./dist/assets/saturn.jpg" />
+            <img id="saturnRings" src="./dist/assets/saturn-rings.png" />
+            <img id="uranus" src="./dist/assets/uranus.jpg" />
+            <img id="neptune" src="./dist/assets/neptune.jpg" />
+        </a-assets>
+        <a-sky src='#sky' radius='2500'></a-sky>
+        <a-entity  position="0 360 -2" id="appMain">
+
+        </a-entity>
+    </a-scene>
+    <script src="./dist/bundle.js"></script>
+</body>
