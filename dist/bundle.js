@@ -120,7 +120,7 @@
 	            });
 	            return _react2.default.createElement(
 	                'a-entity',
-	                { position: '0 1.5 -10', ref: 'sys' },
+	                { position: '0 1.5 -10', ref: 'sys', sync: true, 'sync-transform': true },
 	                _react2.default.createElement(Sun, _extends({ texture: '#sun', now: this.state.calcBase, ref: 'sun' }, scaleProps)),
 	                _react2.default.createElement(Mercury, _extends({ texture: '#mercury' }, bodyProps, { ref: 'mercury' })),
 	                _react2.default.createElement(Venus, _extends({ texture: '#venus' }, bodyProps, { ref: 'venus' })),
