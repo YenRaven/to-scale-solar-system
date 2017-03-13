@@ -47,7 +47,7 @@ Body.defaultProps = {
 
 export class Rings extends React.Component {
     render() {
-        let size = this.props.radius * this.props.scale;
+        let size = this.props.radius * this.props.scale * 2;
         return (
             <a-entity>
             <a-image

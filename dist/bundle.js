@@ -22030,7 +22030,7 @@
 	    _createClass(Rings, [{
 	        key: 'render',
 	        value: function render() {
-	            var size = this.props.radius * this.props.scale;
+	            var size = this.props.radius * this.props.scale * 2;
 	            return _react2.default.createElement(
 	                'a-entity',
 	                null,
