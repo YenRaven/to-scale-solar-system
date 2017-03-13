@@ -9,7 +9,7 @@ class Main extends React.Component {
             calcBase: 0,
             selected: "earth",
             scale: 0.00001,
-            orbitalScale: 0.001
+            orbitalScale: 0.01
         }
     }
     render() {
