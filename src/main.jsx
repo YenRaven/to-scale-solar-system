@@ -28,7 +28,7 @@ class Main extends React.Component {
             parentRadius: 695700
         };
         return (
-            <a-entity position="0 1.5 -10" ref="sys" sync sync-transform>
+            <a-entity position="0 1.5 -10" ref={(system) => {this.sys = system;}} sync sync-transform>
                 <Sun texture="#sun" now={this.state.calcBase} ref="sun" {...scaleProps} />
                 <Mercury texture="#mercury" {...bodyProps} ref="mercury" />
                 <Venus texture="#venus" {...bodyProps} ref="venus" />
@@ -43,9 +43,9 @@ class Main extends React.Component {
     }
 
     componentDidUpdate(){
-        if(this.refs.sys.sync.isMine){
+        if(this.sys.sync.isMine){
             let pos = this.refs[this.state.selected].refs.body.refs.geom.getAttribute("position");
-            this.refs.sys.setAttribute("position", `${-pos.x} 1.5 ${-pos.z}`);
+            this.sys.setAttribute("position", `${-pos.x} 1.5 ${-pos.z}`);
         }
     }
 

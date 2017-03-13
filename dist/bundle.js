@@ -99,6 +99,8 @@
 	    _createClass(Main, [{
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+	
 	            var Sun = Bodies.Sun,
 	                Mercury = Bodies.Mercury,
 	                Venus = Bodies.Venus,
@@ -120,7 +122,9 @@
 	            });
 	            return _react2.default.createElement(
 	                'a-entity',
-	                { position: '0 1.5 -10', ref: 'sys', sync: true, 'sync-transform': true },
+	                { position: '0 1.5 -10', ref: function ref(system) {
+	                        _this2.sys = system;
+	                    }, sync: true, 'sync-transform': true },
 	                _react2.default.createElement(Sun, _extends({ texture: '#sun', now: this.state.calcBase, ref: 'sun' }, scaleProps)),
 	                _react2.default.createElement(Mercury, _extends({ texture: '#mercury' }, bodyProps, { ref: 'mercury' })),
 	                _react2.default.createElement(Venus, _extends({ texture: '#venus' }, bodyProps, { ref: 'venus' })),
@@ -135,18 +139,18 @@
 	    }, {
 	        key: 'componentDidUpdate',
 	        value: function componentDidUpdate() {
-	            if (this.refs.sys.sync.isMine) {
+	            if (this.sys.sync.isMine) {
 	                var pos = this.refs[this.state.selected].refs.body.refs.geom.getAttribute("position");
-	                this.refs.sys.setAttribute("position", -pos.x + ' 1.5 ' + -pos.z);
+	                this.sys.setAttribute("position", -pos.x + ' 1.5 ' + -pos.z);
 	            }
 	        }
 	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            var _this2 = this;
+	            var _this3 = this;
 	
 	            setInterval(function () {
-	                _this2.setState(function (state) {
+	                _this3.setState(function (state) {
 	                    return _extends({}, state, {
 	                        calcBase: state.calcBase + 0.01
 	                    });
