@@ -22030,20 +22030,23 @@
 	    _createClass(Rings, [{
 	        key: 'render',
 	        value: function render() {
+	            var size = this.props.radius * this.props.scale;
 	            return _react2.default.createElement(
 	                'a-entity',
 	                null,
-	                _react2.default.createElement('a-circle', {
-	                    radius: this.props.radius * this.props.scale,
+	                _react2.default.createElement('a-image', {
+	                    width: size,
+	                    height: size,
+	                    transparent: 'true',
 	                    rotation: this.props.rotationX + ' ' + this.props.rotationY + ' ' + this.props.rotationZ,
-	                    color: this.props.texture ? null : this.props.color,
-	                    material: this.props.texture ? 'src: ' + this.props.texture : null
+	                    src: this.props.texture
 	                }),
-	                _react2.default.createElement('a-circle', {
-	                    radius: this.props.radius * this.props.scale,
+	                _react2.default.createElement('a-image', {
+	                    width: size,
+	                    height: size,
+	                    transparent: 'true',
 	                    rotation: -this.props.rotationX + ' ' + this.props.rotationY + ' ' + this.props.rotationZ,
-	                    color: this.props.texture ? null : this.props.color,
-	                    material: this.props.texture ? 'src: ' + this.props.texture : null
+	                    src: this.props.texture
 	                })
 	            );
 	        }

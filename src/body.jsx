@@ -47,19 +47,22 @@ Body.defaultProps = {
 
 export class Rings extends React.Component {
     render() {
+        let size = this.props.radius * this.props.scale;
         return (
             <a-entity>
-            <a-circle
-                radius={this.props.radius * this.props.scale}
+            <a-image
+                width={size}
+                height={size}
+                transparent="true"
                 rotation={`${this.props.rotationX} ${this.props.rotationY} ${this.props.rotationZ}`}
-                color={this.props.texture?null:this.props.color}
-                material={this.props.texture?`src: ${this.props.texture}`:null}
+                src={this.props.texture}
             />
-            <a-circle
-                radius={this.props.radius * this.props.scale}
+            <a-image
+                width={size}
+                height={size}
+                transparent="true"
                 rotation={`${-this.props.rotationX} ${this.props.rotationY} ${this.props.rotationZ}`}
-                color={this.props.texture?null:this.props.color}
-                material={this.props.texture?`src: ${this.props.texture}`:null}
+                src={this.props.texture}
             />
             </a-entity>
         )
