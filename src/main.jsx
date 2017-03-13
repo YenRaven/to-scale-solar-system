@@ -43,8 +43,10 @@ class Main extends React.Component {
     }
 
     componentDidUpdate(){
-        let pos = this.refs[this.state.selected].refs.body.refs.geom.getAttribute("position");
-        this.refs.sys.setAttribute("position", `${-pos.x} 1.5 ${-pos.z}`);
+        if(this.refs.sys.sync.isMine){
+            let pos = this.refs[this.state.selected].refs.body.refs.geom.getAttribute("position");
+            this.refs.sys.setAttribute("position", `${-pos.x} 1.5 ${-pos.z}`);
+        }
     }
 
     componentDidMount(){

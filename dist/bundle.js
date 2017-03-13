@@ -135,8 +135,10 @@
 	    }, {
 	        key: 'componentDidUpdate',
 	        value: function componentDidUpdate() {
-	            var pos = this.refs[this.state.selected].refs.body.refs.geom.getAttribute("position");
-	            this.refs.sys.setAttribute("position", -pos.x + ' 1.5 ' + -pos.z);
+	            if (this.refs.sys.sync.isMine) {
+	                var pos = this.refs[this.state.selected].refs.body.refs.geom.getAttribute("position");
+	                this.refs.sys.setAttribute("position", -pos.x + ' 1.5 ' + -pos.z);
+	            }
 	        }
 	    }, {
 	        key: 'componentDidMount',
