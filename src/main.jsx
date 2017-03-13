@@ -49,6 +49,16 @@ class Main extends React.Component {
         )
     }
 
+    componentDidUpdate(){
+        var pos;
+        if(this.sys && this.sys.components.sync && this.sys.components.sync.isMine){
+            pos = this.refs[this.state.selected].refs.body.getPosition(bodyProps.now);
+        }else{
+            pos = {x:0, y:1.5, z:-10};
+        }
+        this.sys.setAttribute("position", `${-pos.x} ${pos.y+1.5} ${-pos.z}`);
+    }
+
     componentDidMount(){
       setInterval(()=>{
           this.setState((state) => {
