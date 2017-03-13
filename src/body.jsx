@@ -13,12 +13,7 @@ export class Body extends React.Component {
     }
 
     render() {
-        var p = this.props.now / this.props.orbitalDist
-        p = isNaN(p)?0:p;
-        p = Infinity == p?0:p;
-        var x = ((Math.sin(p) * this.props.orbitalDist * 1000000) * this.props.orbitalScale * this.props.scale) + (Math.sin(p) * (this.props.parentRadius * this.props.scale));
-        var y = 0;
-        var z = ((Math.cos(p) * this.props.orbitalDist * 1000000) * this.props.orbitalScale * this.props.scale) + (Math.cos(p) * (this.props.parentRadius * this.props.scale));
+        let {x, y, z} = this.getPosition(this.props.now);
         return (
             <a-sphere
                 ref={(geom) => {this.geom = geom;}}
@@ -38,6 +33,17 @@ export class Body extends React.Component {
 
     shouldComponentUpdate(){
         return this.geom.components.sync.isMine || false;
+    }
+
+    getPosition(n){
+        let p = n / this.props.orbitalDist;
+        p = isNaN(p)?0:p;
+        p = Infinity == p?0:p;
+        return {
+            x: ((Math.sin(p) * this.props.orbitalDist * 1000000) * this.props.orbitalScale * this.props.scale) + (Math.sin(p) * (this.props.parentRadius * this.props.scale)),
+            y: 0,
+            z: ((Math.cos(p) * this.props.orbitalDist * 1000000) * this.props.orbitalScale * this.props.scale) + (Math.cos(p) * (this.props.parentRadius * this.props.scale))
+        };
     }
 }
 

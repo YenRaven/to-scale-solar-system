@@ -120,9 +120,16 @@
 	                now: this.state.calcBase,
 	                parentRadius: 695700
 	            });
+	            var pos;
+	            if (this.sys && this.sys.components.sync && this.sys.components.sync.isMine) {
+	                pos = this.refs[this.state.selected].refs.body.getPosition(bodyProps.now);
+	            } else {
+	                pos = { x: 0, y: 1.5, z: -10 };
+	            }
+	
 	            return _react2.default.createElement(
 	                'a-entity',
-	                { id: 'System', position: '0 1.5 -10', ref: function ref(system) {
+	                { id: 'System', position: pos.x + ' ' + pos.y + ' ' + pos.z, ref: function ref(system) {
 	                        _this2.sys = system;
 	                    }, sync: true, 'sync-transform': true },
 	                _react2.default.createElement(Sun, _extends({ texture: '#sun', now: this.state.calcBase, ref: 'sun' }, scaleProps)),
@@ -135,14 +142,6 @@
 	                _react2.default.createElement(Uranus, _extends({ texture: '#uranus' }, bodyProps, { ref: 'uranus' })),
 	                _react2.default.createElement(Neptune, _extends({ texture: '#neptune' }, bodyProps, { ref: 'neptune' }))
 	            );
-	        }
-	    }, {
-	        key: 'componentDidUpdate',
-	        value: function componentDidUpdate() {
-	            if (this.sys.components.sync.isMine) {
-	                var pos = this.refs[this.state.selected].refs.body.geom.getAttribute("position");
-	                this.sys.setAttribute("position", -pos.x + ' 1.5 ' + -pos.z);
-	            }
 	        }
 	    }, {
 	        key: 'componentDidMount',
@@ -21980,12 +21979,11 @@
 	        value: function render() {
 	            var _this2 = this;
 	
-	            var p = this.props.now / this.props.orbitalDist;
-	            p = isNaN(p) ? 0 : p;
-	            p = Infinity == p ? 0 : p;
-	            var x = Math.sin(p) * this.props.orbitalDist * 1000000 * this.props.orbitalScale * this.props.scale + Math.sin(p) * (this.props.parentRadius * this.props.scale);
-	            var y = 0;
-	            var z = Math.cos(p) * this.props.orbitalDist * 1000000 * this.props.orbitalScale * this.props.scale + Math.cos(p) * (this.props.parentRadius * this.props.scale);
+	            var _getPosition = this.getPosition(this.props.now),
+	                x = _getPosition.x,
+	                y = _getPosition.y,
+	                z = _getPosition.z;
+	
 	            return _react2.default.createElement(
 	                'a-sphere',
 	                {
@@ -22008,6 +22006,18 @@
 	        key: 'shouldComponentUpdate',
 	        value: function shouldComponentUpdate() {
 	            return this.geom.components.sync.isMine || false;
+	        }
+	    }, {
+	        key: 'getPosition',
+	        value: function getPosition(n) {
+	            var p = n / this.props.orbitalDist;
+	            p = isNaN(p) ? 0 : p;
+	            p = Infinity == p ? 0 : p;
+	            return {
+	                x: Math.sin(p) * this.props.orbitalDist * 1000000 * this.props.orbitalScale * this.props.scale + Math.sin(p) * (this.props.parentRadius * this.props.scale),
+	                y: 0,
+	                z: Math.cos(p) * this.props.orbitalDist * 1000000 * this.props.orbitalScale * this.props.scale + Math.cos(p) * (this.props.parentRadius * this.props.scale)
+	            };
 	        }
 	    }]);
 	
