@@ -21852,8 +21852,10 @@
 	                }, scaleProps),
 	                _react2.default.createElement(_body.Rings, _extends({
 	                    radius: 138232,
-	                    color: '#00000000',
-	                    rotation: '-90 0 0',
+	                    color: '#000000',
+	                    rotationX: -90,
+	                    rotationY: 0,
+	                    rotationZ: 0,
 	                    texture: '#saturnRings'
 	                }, scaleProps))
 	            );
@@ -22028,12 +22030,22 @@
 	    _createClass(Rings, [{
 	        key: 'render',
 	        value: function render() {
-	            return _react2.default.createElement('a-circle', {
-	                radius: this.props.radius * this.props.scale,
-	                rotation: this.props.rotation,
-	                color: this.props.texture ? null : this.props.color,
-	                material: this.props.texture ? 'src: ' + this.props.texture : null
-	            });
+	            return _react2.default.createElement(
+	                'a-entity',
+	                null,
+	                _react2.default.createElement('a-circle', {
+	                    radius: this.props.radius * this.props.scale,
+	                    rotation: this.props.rotationX + ' ' + this.props.rotationY + ' ' + this.props.rotationZ,
+	                    color: this.props.texture ? null : this.props.color,
+	                    material: this.props.texture ? 'src: ' + this.props.texture : null
+	                }),
+	                _react2.default.createElement('a-circle', {
+	                    radius: this.props.radius * this.props.scale,
+	                    rotation: -this.props.rotationX + ' ' + this.props.rotationY + ' ' + this.props.rotationZ,
+	                    color: this.props.texture ? null : this.props.color,
+	                    material: this.props.texture ? 'src: ' + this.props.texture : null
+	                })
+	            );
 	        }
 	    }]);
 	

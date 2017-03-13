@@ -145,8 +145,10 @@ export class Saturn extends React.Component {
             >
                 <Rings
                     radius={138232}
-                    color="#00000000"
-                    rotation="-90 0 0"
+                    color="#000000"
+                    rotationX={-90}
+                    rotationY={0}
+                    rotationZ={0}
                     texture="#saturnRings"
                     {...scaleProps}
                 />
