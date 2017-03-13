@@ -37,7 +37,7 @@ export class Body extends React.Component {
     }
 
     shouldComponentUpdate(){
-        return this.geom.components.sync.isMine;
+        return this.geom.components.sync.isMine || false;
     }
 }
 

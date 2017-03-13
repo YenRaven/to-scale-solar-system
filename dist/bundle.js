@@ -22005,7 +22005,7 @@
 	    }, {
 	        key: 'shouldComponentUpdate',
 	        value: function shouldComponentUpdate() {
-	            return this.geom.components.sync.isMine;
+	            return this.geom.components.sync.isMine || false;
 	        }
 	    }]);
 	
