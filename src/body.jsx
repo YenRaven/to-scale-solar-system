@@ -21,7 +21,7 @@ export class Body extends React.Component {
         var z = ((Math.cos(p) * this.props.orbitalDist * 1000000) * this.props.orbitalScale * this.props.scale) + (Math.cos(p) * (this.props.parentRadius * this.props.scale));
         return (
             <a-sphere
-                ref="geom"
+                ref={(geom) => {this.geom = geom;}}
                 id={this.state.id}
                 position={`${x.toFixed(2)} ${y.toFixed(2)} ${z.toFixed(2)}`}
                 radius={this.props.radius * this.props.scale}
@@ -34,6 +34,10 @@ export class Body extends React.Component {
                 {this.props.children}
             </a-sphere>
         )
+    }
+
+    shouldComponentUpdate(){
+        return this.geom.components.sync.isMine;
     }
 }
 

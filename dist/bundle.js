@@ -21976,6 +21976,8 @@
 	    _createClass(Body, [{
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+	
 	            var p = this.props.now / this.props.orbitalDist;
 	            p = isNaN(p) ? 0 : p;
 	            p = Infinity == p ? 0 : p;
@@ -21985,7 +21987,9 @@
 	            return _react2.default.createElement(
 	                'a-sphere',
 	                {
-	                    ref: 'geom',
+	                    ref: function ref(geom) {
+	                        _this2.geom = geom;
+	                    },
 	                    id: this.state.id,
 	                    position: x.toFixed(2) + ' ' + y.toFixed(2) + ' ' + z.toFixed(2),
 	                    radius: this.props.radius * this.props.scale,
@@ -21997,6 +22001,11 @@
 	                },
 	                this.props.children
 	            );
+	        }
+	    }, {
+	        key: 'shouldComponentUpdate',
+	        value: function shouldComponentUpdate() {
+	            return this.geom.components.sync.isMine;
 	        }
 	    }]);
 	
