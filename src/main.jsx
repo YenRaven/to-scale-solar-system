@@ -28,7 +28,7 @@ class Main extends React.Component {
             parentRadius: 695700
         };
         return (
-            <a-entity position="0 1.5 -10" ref={(system) => {this.sys = system;}} sync sync-transform>
+            <a-entity id="System" position="0 1.5 -10" ref={(system) => {this.sys = system;}} sync sync-transform>
                 <Sun texture="#sun" now={this.state.calcBase} ref="sun" {...scaleProps} />
                 <Mercury texture="#mercury" {...bodyProps} ref="mercury" />
                 <Venus texture="#venus" {...bodyProps} ref="venus" />

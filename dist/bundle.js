@@ -122,7 +122,7 @@
 	            });
 	            return _react2.default.createElement(
 	                'a-entity',
-	                { position: '0 1.5 -10', ref: function ref(system) {
+	                { id: 'System', position: '0 1.5 -10', ref: function ref(system) {
 	                        _this2.sys = system;
 	                    }, sync: true, 'sync-transform': true },
 	                _react2.default.createElement(Sun, _extends({ texture: '#sun', now: this.state.calcBase, ref: 'sun' }, scaleProps)),
