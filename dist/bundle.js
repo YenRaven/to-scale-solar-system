@@ -129,7 +129,7 @@
 	
 	            return _react2.default.createElement(
 	                'a-entity',
-	                { id: 'System', position: pos.x + ' ' + pos.y + ' ' + pos.z, ref: function ref(system) {
+	                { id: 'System', position: -pos.x + ' ' + pos.y + ' ' + -pos.z, ref: function ref(system) {
 	                        _this2.sys = system;
 	                    }, sync: true, 'sync-transform': true },
 	                _react2.default.createElement(Sun, _extends({ texture: '#sun', now: this.state.calcBase, ref: 'sun' }, scaleProps)),

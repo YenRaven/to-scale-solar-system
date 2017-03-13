@@ -35,7 +35,7 @@ class Main extends React.Component {
         }
 
         return (
-            <a-entity id="System" position={`${pos.x} ${pos.y} ${pos.z}`} ref={(system) => {this.sys = system;}} sync sync-transform>
+            <a-entity id="System" position={`${-pos.x} ${pos.y} ${-pos.z}`} ref={(system) => {this.sys = system;}} sync sync-transform>
                 <Sun texture="#sun" now={this.state.calcBase} ref="sun" {...scaleProps} />
                 <Mercury texture="#mercury" {...bodyProps} ref="mercury" />
                 <Venus texture="#venus" {...bodyProps} ref="venus" />
