@@ -69,6 +69,10 @@
 	
 	var Bodies = _interopRequireWildcard(_bodies);
 	
+	var _animator = __webpack_require__(181);
+	
+	var _animator2 = _interopRequireDefault(_animator);
+	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -91,7 +95,7 @@
 	            calcBase: 0,
 	            selected: "earth",
 	            scale: 0.00001,
-	            orbitalScale: 0.01
+	            orbitalScale: 0.001
 	        };
 	        return _this;
 	    }
@@ -120,39 +124,51 @@
 	                now: this.state.calcBase,
 	                parentRadius: 695700
 	            });
-	            var pos;
-	            if (this.sys && this.sys.components.sync && this.sys.components.sync.isMine) {
-	                pos = this.refs[this.state.selected].refs.body.getPosition(bodyProps.now);
-	            } else {
-	                pos = { x: 0, y: 1.5, z: -10 };
-	            }
 	
 	            return _react2.default.createElement(
-	                'a-entity',
-	                { id: 'System', position: -pos.x + ' ' + (pos.y + 1.5) + ' ' + -pos.z, ref: function ref(system) {
-	                        _this2.sys = system;
-	                    }, sync: true, 'sync-transform': true },
-	                _react2.default.createElement(Sun, _extends({ texture: '#sun', now: this.state.calcBase, ref: 'sun' }, scaleProps)),
-	                _react2.default.createElement(Mercury, _extends({ texture: '#mercury' }, bodyProps, { ref: 'mercury' })),
-	                _react2.default.createElement(Venus, _extends({ texture: '#venus' }, bodyProps, { ref: 'venus' })),
-	                _react2.default.createElement(Earth, _extends({ texture: '#earth' }, bodyProps, { ref: 'earth' })),
-	                _react2.default.createElement(Mars, _extends({ texture: '#mars' }, bodyProps, { ref: 'mars' })),
-	                _react2.default.createElement(Juipter, _extends({ texture: '#juipter' }, bodyProps, { ref: 'juipter' })),
-	                _react2.default.createElement(Saturn, _extends({ texture: '#saturn' }, bodyProps, { ref: 'saturn' })),
-	                _react2.default.createElement(Uranus, _extends({ texture: '#uranus' }, bodyProps, { ref: 'uranus' })),
-	                _react2.default.createElement(Neptune, _extends({ texture: '#neptune' }, bodyProps, { ref: 'neptune' }))
+	                _animator2.default,
+	                { ref: 'animator', animationTime: 1000 },
+	                _react2.default.createElement(
+	                    'a-entity',
+	                    { id: 'System',
+	                        position: this.refs.animator ? this.refs.animator.state.to.x + ' 1.5 ' + this.refs.animator.state.to.z : "0 1.5 0",
+	                        ref: function ref(system) {
+	                            _this2.sys = system;
+	                        } },
+	                    _react2.default.createElement(Sun, _extends({ texture: '#sun', now: this.state.calcBase, ref: 'sun' }, scaleProps)),
+	                    _react2.default.createElement(Mercury, _extends({ texture: '#mercury' }, bodyProps, { ref: 'mercury' })),
+	                    _react2.default.createElement(Venus, _extends({ texture: '#venus' }, bodyProps, { ref: 'venus' })),
+	                    _react2.default.createElement(Earth, _extends({ texture: '#earth' }, bodyProps, { ref: 'earth' })),
+	                    _react2.default.createElement(Mars, _extends({ texture: '#mars' }, bodyProps, { ref: 'mars' })),
+	                    _react2.default.createElement(Juipter, _extends({ texture: '#juipter' }, bodyProps, { ref: 'juipter' })),
+	                    _react2.default.createElement(Saturn, _extends({ texture: '#saturn' }, bodyProps, { ref: 'saturn' })),
+	                    _react2.default.createElement(Uranus, _extends({ texture: '#uranus' }, bodyProps, { ref: 'uranus' })),
+	                    _react2.default.createElement(Neptune, _extends({ texture: '#neptune' }, bodyProps, { ref: 'neptune' }))
+	                )
 	            );
 	        }
 	    }, {
-	        key: 'componentDidUpdate',
-	        value: function componentDidUpdate() {
-	            var pos;
+	        key: 'componentWillUpdate',
+	        value: function componentWillUpdate(nextProps, nextState) {
+	            var targPos = void 0;
+	            var sysPos = void 0;
 	            if (this.sys && this.sys.components.sync && this.sys.components.sync.isMine) {
-	                pos = this.refs[this.state.selected].refs.body.geom.getAttribute("position");
+	                targPos = this.refs[this.state.selected].refs.body.getPosition(nextState.calcBase);
+	                sysPos = this.refs.animator.state.to;
+	                targPos.x = -targPos.x;
+	                targPos.z = -targPos.z;
+	                targPos.y = 1.5;
+	
+	                this.refs.animator.setState(function (state) {
+	                    return _extends({}, state, {
+	                        from: sysPos,
+	                        to: targPos
+	                    });
+	                });
 	            } else {
-	                pos = { x: 0, y: 1.5, z: -10 };
+	                targPos = { x: 0, y: 1.5, z: -10 };
+	                sysPos = { x: 0, y: 1.5, z: -10 };
 	            }
-	            this.sys.setAttribute("position", -pos.x + ' ' + (pos.y + 1.5) + ' ' + -pos.z);
 	        }
 	    }, {
 	        key: 'componentDidMount',
@@ -162,10 +178,10 @@
 	            setInterval(function () {
 	                _this3.setState(function (state) {
 	                    return _extends({}, state, {
-	                        calcBase: state.calcBase + 0.01
+	                        calcBase: state.calcBase + 1
 	                    });
 	                });
-	            }, 10);
+	            }, 1000);
 	        }
 	    }]);
 	
@@ -21950,6 +21966,8 @@
 	});
 	exports.Rings = exports.Body = undefined;
 	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(2);
@@ -21959,6 +21977,10 @@
 	var _reactDom = __webpack_require__(33);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _animator = __webpack_require__(181);
+	
+	var _animator2 = _interopRequireDefault(_animator);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -21996,27 +22018,38 @@
 	                z = _getPosition.z;
 	
 	            return _react2.default.createElement(
-	                'a-sphere',
-	                {
-	                    ref: function ref(geom) {
-	                        _this2.geom = geom;
+	                _animator2.default,
+	                { ref: 'animator', animationTime: 1000 },
+	                _react2.default.createElement(
+	                    'a-sphere',
+	                    {
+	                        ref: function ref(geom) {
+	                            _this2.geom = geom;
+	                        },
+	                        id: this.state.id,
+	                        position: this.refs.animator ? this.refs.animator.state.to.x + ' ' + this.refs.animator.state.to.y + ' ' + this.refs.animator.state.to.z : "0 0 0",
+	                        radius: this.props.radius * this.props.scale,
+	                        color: this.props.texture ? null : this.props.color,
+	                        material: this.props.texture ? 'src: ' + this.props.texture : null,
+	                        'segments-height': _LOD,
+	                        'segments-width': _LOD
 	                    },
-	                    id: this.state.id,
-	                    position: x.toFixed(2) + ' ' + y.toFixed(2) + ' ' + z.toFixed(2),
-	                    radius: this.props.radius * this.props.scale,
-	                    color: this.props.texture ? null : this.props.color,
-	                    material: this.props.texture ? 'src: ' + this.props.texture : null,
-	                    'segments-height': _LOD,
-	                    'segments-width': _LOD,
-	                    sync: true, 'sync-transform': true
-	                },
-	                this.props.children
+	                    this.props.children
+	                )
 	            );
 	        }
 	    }, {
-	        key: 'shouldComponentUpdate',
-	        value: function shouldComponentUpdate() {
-	            return this.geom.components.sync.isMine || false;
+	        key: 'componentWillUpdate',
+	        value: function componentWillUpdate(nextProps) {
+	            var newPos = this.getPosition(nextProps.now);
+	            var oldPos = this.getPosition(this.props.now);
+	
+	            this.refs.animator.setState(function (state) {
+	                return _extends({}, state, {
+	                    from: oldPos,
+	                    to: newPos
+	                });
+	            });
 	        }
 	    }, {
 	        key: 'getPosition',
@@ -22075,6 +22108,193 @@
 	
 	    return Rings;
 	}(_react2.default.Component);
+
+/***/ },
+/* 181 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(33);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _util = __webpack_require__(182);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var animationId = 0;
+	
+	var Animator = function (_React$Component) {
+	    _inherits(Animator, _React$Component);
+	
+	    function Animator(props) {
+	        _classCallCheck(this, Animator);
+	
+	        var _this = _possibleConstructorReturn(this, (Animator.__proto__ || Object.getPrototypeOf(Animator)).call(this, props));
+	
+	        _this.state = {
+	            to: {
+	                x: 0,
+	                y: 0,
+	                z: 0
+	            },
+	            from: {
+	                x: 0,
+	                y: 0,
+	                z: 0
+	            }
+	        };
+	
+	        _this.animationState = {
+	            cx: 0,
+	            cy: 0,
+	            cz: 0
+	        };
+	        return _this;
+	    }
+	
+	    _createClass(Animator, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            animationId++;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+	
+	            return _react2.default.createElement(
+	                'a-entity',
+	                null,
+	                _react2.default.createElement('a-entity', { id: 'a-to-' + animationId, ref: function ref(el) {
+	                        _this2.to = el;
+	                    }, position: this.state.to.x + ' ' + this.state.to.y + ' ' + this.state.to.z, sync: true, 'sync-transform': true }),
+	                _react2.default.createElement('a-entity', { id: 'a-from-' + animationId, ref: function ref(el) {
+	                        _this2.from = el;
+	                    }, position: this.state.from.x + ' ' + this.state.from.y + ' ' + this.state.from.z, sync: true, 'sync-transform': true }),
+	                _react2.default.cloneElement(_react2.default.Children.only(this.props.children), {
+	                    ref: function ref(el) {
+	                        _this2.el = el;_react2.default.Children.only(_this2.props.children).ref(el);
+	                    }
+	                })
+	            );
+	        }
+	    }, {
+	        key: 'animate',
+	        value: function animate(from, to) {
+	            var xtween = (0, _util.simpleIterator)(from.x, to.x, _util.linear);
+	            var ytween = (0, _util.simpleIterator)(from.y, to.y, _util.linear);
+	            var ztween = (0, _util.simpleIterator)(from.z, to.z, _util.linear);
+	
+	            var fn = Date.now();
+	            var at = this.props.animationTime;
+	            var el = this.el;
+	            var a = function a(fn, at, el, xtween, ytween, ztween) {
+	                return function () {
+	                    var n = Date.now();
+	                    var i = (n - fn) / at;
+	                    if (i < 1) {
+	                        window.requestAnimationFrame(a(fn, at, el, xtween, ytween, ztween));
+	                        el.setAttribute("position", xtween(i) + ' ' + ytween(i) + ' ' + ztween(i));
+	                    }
+	                };
+	            };
+	            window.requestAnimationFrame(a(fn, at, el, xtween, ytween, ztween));
+	        }
+	    }, {
+	        key: 'watch',
+	        value: function watch() {
+	            this.observer = new MutationObserver(function (mutations) {
+	                var _this3 = this;
+	
+	                mutations.forEach(function (mutation) {
+	                    _this3.animate(_this3.from.getAttribute("position"), _this3.to.getAttribute("position"));
+	                });
+	            });
+	
+	            var config = { attributes: true, childList: false, characterData: false };
+	
+	            // pass in the target node, as well as the observer options
+	            this.observer.observe(this.refs.to, config);
+	            //this.observer.observe(this.refs.from, config);
+	        }
+	    }, {
+	        key: 'unwatch',
+	        value: function unwatch() {
+	            if (this.observer) {
+	                this.observer.disconnect();
+	            }
+	        }
+	    }, {
+	        key: 'shouldComponentUpdate',
+	        value: function shouldComponentUpdate() {
+	            return this.to.components.sync.isMine || false;
+	            if (this.to.components.sync.isMine) {
+	                this.unwatch();
+	            } else {
+	                this.watch();
+	            }
+	        }
+	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {
+	            this.animate(this.state.from, this.state.to);
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            if (this.observer) {
+	                this.observer.disconnect();
+	            }
+	        }
+	    }]);
+	
+	    return Animator;
+	}(_react2.default.Component);
+	
+	exports.default = Animator;
+	
+	
+	Animator.defaultProps = {
+	    animationTime: 100
+	};
+
+/***/ },
+/* 182 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var simpleIterator = exports.simpleIterator = function simpleIterator(from, to, ease) {
+	    var diff = to - from;
+	    return function (i) {
+	        return ease(i) * diff + from;
+	    };
+	};
+	
+	var linear = exports.linear = function linear(t) {
+	    return t;
+	};
 
 /***/ }
 /******/ ]);

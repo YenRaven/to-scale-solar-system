@@ -38,7 +38,7 @@ gulp.task('server', shell.task([
 
 gulp.task('default', ['build'], function(){
     gulp.start('server');
-    return watch('src/*', function() {
+    return watch('src/**/*', function() {
         html();
         assets();
         build();

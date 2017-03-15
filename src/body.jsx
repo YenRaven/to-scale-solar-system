@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Animator from './utils/animator.jsx';
 
 const _LOD = 32;
 var bodyCount = 0;
@@ -15,24 +16,35 @@ export class Body extends React.Component {
     render() {
         let {x, y, z} = this.getPosition(this.props.now);
         return (
-            <a-sphere
-                ref={(geom) => {this.geom = geom;}}
-                id={this.state.id}
-                position={`${x.toFixed(2)} ${y.toFixed(2)} ${z.toFixed(2)}`}
-                radius={this.props.radius * this.props.scale}
-                color={this.props.texture?null:this.props.color}
-                material={this.props.texture?`src: ${this.props.texture}`:null}
-                segments-height={_LOD}
-                segments-width={_LOD}
-                sync sync-transform
-            >
-                {this.props.children}
-            </a-sphere>
+            <Animator ref="animator" animationTime={1000}>
+                <a-sphere
+                    ref={(geom) => {this.geom = geom;}}
+                    id={this.state.id}
+                    position={this.refs.animator?`${this.refs.animator.state.to.x} ${this.refs.animator.state.to.y} ${this.refs.animator.state.to.z}` : "0 0 0"}
+                    radius={this.props.radius * this.props.scale}
+                    color={this.props.texture?null:this.props.color}
+                    material={this.props.texture?`src: ${this.props.texture}`:null}
+                    segments-height={_LOD}
+                    segments-width={_LOD}
+                >
+                    {this.props.children}
+                </a-sphere>
+            </Animator>
         )
     }
 
-    shouldComponentUpdate(){
-        return this.geom.components.sync.isMine || false;
+    componentWillUpdate(nextProps){
+        let newPos = this.getPosition(nextProps.now);
+        let oldPos = this.getPosition(this.props.now);
+
+        this.refs.animator.setState((state) => {
+            return {
+                ...state,
+                from: oldPos,
+                to: newPos
+            }
+        })
+
     }
 
     getPosition(n){
