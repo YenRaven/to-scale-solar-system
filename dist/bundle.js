@@ -22168,7 +22168,7 @@
 	    }, {
 	        key: 'shouldComponentUpdate',
 	        value: function shouldComponentUpdate() {
-	            return this.el.components.sync.isMine;
+	            return this.el && this.el.components.sync.isMine;
 	        }
 	    }]);
 	
@@ -22257,8 +22257,8 @@
 	            var from = this.from,
 	                to = this.to;
 	
-	            from = from.getAttribute("position");
-	            to = to.getAttribute("position");
+	            from = from.el.getAttribute("position");
+	            to = to.el.getAttribute("position");
 	            if (from.x != this.lastFrom.x || from.y != this.lastFrom.y || from.z != this.lastFrom.z) {
 	                this.animate(from, to);
 	                this.lastFrom = _extends({}, state, {

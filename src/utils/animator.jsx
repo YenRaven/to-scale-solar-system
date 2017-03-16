@@ -9,7 +9,7 @@ class AnimatorSync extends React.Component {
     }
 
     shouldComponentUpdate(){
-        return this.el.components.sync.isMine;
+        return this.el && this.el.components.sync.isMine;
     }
 }
 
@@ -76,8 +76,8 @@ export default class Animator extends React.Component {
 
     watch(){
         let {from, to} = this;
-        from = from.getAttribute("position");
-        to = to.getAttribute("position");
+        from = from.el.getAttribute("position");
+        to = to.el.getAttribute("position");
         if(from.x != this.lastFrom.x || from.y != this.lastFrom.y || from.z != this.lastFrom.z){
             this.animate(
                 from,
