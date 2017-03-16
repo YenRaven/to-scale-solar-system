@@ -22239,7 +22239,7 @@
 	                var config = { attributes: true, childList: false, characterData: false };
 	
 	                // pass in the target node, as well as the observer options
-	                this.observer.observe(this.refs.to, config);
+	                this.observer.observe(this.to, config);
 	                //this.observer.observe(this.refs.from, config);
 	            }
 	        }
