@@ -29,9 +29,10 @@ export default class Animator extends React.Component {
 
     render(){
         this.child = React.Children.only(this.props.children);
+        var toPos, fromPos;
         if(this.to && this.from){
-            let toPos = this.to.getAttribute("position");
-            let fromPos = this.from.getAttribute("position");
+            toPos = this.to.getAttribute("position");
+            fromPos = this.from.getAttribute("position");
         }
         return (
             <a-entity>

@@ -22185,9 +22185,10 @@
 	            var _this2 = this;
 	
 	            this.child = _react2.default.Children.only(this.props.children);
+	            var toPos, fromPos;
 	            if (this.to && this.from) {
-	                var _toPos = this.to.getAttribute("position");
-	                var _fromPos = this.from.getAttribute("position");
+	                toPos = this.to.getAttribute("position");
+	                fromPos = this.from.getAttribute("position");
 	            }
 	            return _react2.default.createElement(
 	                'a-entity',
