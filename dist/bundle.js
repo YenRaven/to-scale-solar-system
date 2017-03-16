@@ -22147,17 +22147,45 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var AnimatorSync = function (_React$Component) {
+	    _inherits(AnimatorSync, _React$Component);
+	
+	    function AnimatorSync() {
+	        _classCallCheck(this, AnimatorSync);
+	
+	        return _possibleConstructorReturn(this, (AnimatorSync.__proto__ || Object.getPrototypeOf(AnimatorSync)).apply(this, arguments));
+	    }
+	
+	    _createClass(AnimatorSync, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+	
+	            return _react2.default.createElement('a-entity', { id: 'a-' + this.props.type + '-' + animationId, position: this.props.position.x + ' ' + this.props.position.y + ' ' + this.props.position.z, ref: function ref(el) {
+	                    _this2.el = el;
+	                }, sync: true, 'sync-transform': true });
+	        }
+	    }, {
+	        key: 'shouldComponentUpdate',
+	        value: function shouldComponentUpdate() {
+	            return this.el.components.sync.isMine;
+	        }
+	    }]);
+	
+	    return AnimatorSync;
+	}(_react2.default.Component);
+	
 	var animationId = 0;
 	
-	var Animator = function (_React$Component) {
-	    _inherits(Animator, _React$Component);
+	var Animator = function (_React$Component2) {
+	    _inherits(Animator, _React$Component2);
 	
 	    function Animator(props) {
 	        _classCallCheck(this, Animator);
 	
-	        var _this = _possibleConstructorReturn(this, (Animator.__proto__ || Object.getPrototypeOf(Animator)).call(this, props));
+	        var _this3 = _possibleConstructorReturn(this, (Animator.__proto__ || Object.getPrototypeOf(Animator)).call(this, props));
 	
-	        _this.state = {
+	        _this3.state = {
 	            to: {
 	                x: 0,
 	                y: 0,
@@ -22170,8 +22198,8 @@
 	            }
 	        };
 	
-	        _this.doUpdates = true;
-	        return _this;
+	        _this3.lastFrom = _this3.state.from;
+	        return _this3;
 	    }
 	
 	    _createClass(Animator, [{
@@ -22182,26 +22210,21 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this2 = this;
+	            var _this4 = this;
 	
 	            this.child = _react2.default.Children.only(this.props.children);
-	            var toPos, fromPos;
-	            if (this.to && this.from) {
-	                toPos = this.to.getAttribute("position");
-	                fromPos = this.from.getAttribute("position");
-	            }
 	            return _react2.default.createElement(
 	                'a-entity',
 	                null,
-	                _react2.default.createElement('a-entity', { id: 'a-to-' + animationId, ref: function ref(el) {
-	                        _this2.to = el;
-	                    }, position: this.doUpdates ? this.state.to.x + ' ' + this.state.to.y + ' ' + this.state.to.z : toPos.x + ' ' + toPos.y + ' ' + toPos.z, sync: true, 'sync-transform': true }),
-	                _react2.default.createElement('a-entity', { id: 'a-from-' + animationId, ref: function ref(el) {
-	                        _this2.from = el;
-	                    }, position: this.doUpdates ? this.state.from.x + ' ' + this.state.from.y + ' ' + this.state.from.z : fromPos.x + ' ' + fromPos.y + ' ' + fromPos.z, sync: true, 'sync-transform': true }),
+	                _react2.default.createElement(AnimatorSync, { type: 'to', ref: function ref(to) {
+	                        _this4.to = to;
+	                    }, position: this.state.to }),
+	                _react2.default.createElement(AnimatorSync, { type: 'from', ref: function ref(from) {
+	                        _this4.from = from;
+	                    }, position: this.state.from }),
 	                _react2.default.cloneElement(this.child, {
 	                    ref: function ref(el) {
-	                        _this2.el = el;_this2.child.ref(el);
+	                        _this4.el = el;_this4.child.ref(el);
 	                    }
 	                })
 	            );
@@ -22236,9 +22259,9 @@
 	
 	            from = from.getAttribute("position");
 	            to = to.getAttribute("position");
-	            if (from.x != this.state.from.x || from.y != this.state.from.y || from.z != this.state.from.z) {
+	            if (from.x != this.lastFrom.x || from.y != this.lastFrom.y || from.z != this.lastFrom.z) {
 	                this.animate(from, to);
-	                this.state = _extends({}, this.state, {
+	                this.lastFrom = _extends({}, state, {
 	                    from: from,
 	                    to: to
 	                });
@@ -22257,6 +22280,9 @@
 	        value: function componentDidMount() {
 	            this.doUpdates = this.isMine();
 	        }
+	    }, {
+	        key: 'shouldComponentUpdate',
+	        value: function shouldComponentUpdate() {}
 	    }, {
 	        key: 'componentDidUpdate',
 	        value: function componentDidUpdate() {

@@ -2,6 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {simpleIterator, linear} from "./util.js";
 
+
+class AnimatorSync extends React.Component {
+    render(){
+        return <a-entity id={`a-${this.props.type}-${animationId}`} position={`${this.props.position.x} ${this.props.position.y} ${this.props.position.z}`} ref={(el) => {this.el = el;}} sync sync-transform />
+    }
+
+    shouldComponentUpdate(){
+        return this.el.components.sync.isMine;
+    }
+}
+
 var animationId = 0;
 export default class Animator extends React.Component {
     constructor(props) {
@@ -20,7 +31,7 @@ export default class Animator extends React.Component {
             }
         }
 
-        this.doUpdates = true;
+        this.lastFrom = this.state.from;
     }
 
     componentWillMount() {
@@ -29,23 +40,10 @@ export default class Animator extends React.Component {
 
     render(){
         this.child = React.Children.only(this.props.children);
-        var toPos, fromPos;
-        if(this.to && this.from){
-            toPos = this.to.getAttribute("position");
-            fromPos = this.from.getAttribute("position");
-        }
         return (
             <a-entity>
-                <a-entity id={`a-to-${animationId}`} ref={(el) => {this.to = el;}} position={
-                    this.doUpdates?
-                    `${this.state.to.x} ${this.state.to.y} ${this.state.to.z}`:
-                    `${toPos.x} ${toPos.y} ${toPos.z}`
-                } sync sync-transform />
-                <a-entity id={`a-from-${animationId}`} ref={(el) => {this.from = el;}} position={
-                    this.doUpdates?
-                    `${this.state.from.x} ${this.state.from.y} ${this.state.from.z}`:
-                    `${fromPos.x} ${fromPos.y} ${fromPos.z}`
-                } sync sync-transform />
+                <AnimatorSync type="to" ref={(to) => {this.to = to;}} position={this.state.to} />
+                <AnimatorSync type="from" ref={(from) => {this.from = from;}} position={this.state.from} />
                 {
                     React.cloneElement(this.child,
                         {
@@ -80,13 +78,13 @@ export default class Animator extends React.Component {
         let {from, to} = this;
         from = from.getAttribute("position");
         to = to.getAttribute("position");
-        if(from.x != this.state.from.x || from.y != this.state.from.y || from.z != this.state.from.z){
+        if(from.x != this.lastFrom.x || from.y != this.lastFrom.y || from.z != this.lastFrom.z){
             this.animate(
                 from,
                 to
             )
-            this.state = {
-                ...this.state,
+            this.lastFrom = {
+                ...state,
                 from,
                 to
             }
@@ -104,6 +102,8 @@ export default class Animator extends React.Component {
     componentDidMount(){
         this.doUpdates = this.isMine();
     }
+
+    shouldComponentUpdate(){}
 
     componentDidUpdate(){
         this.doUpdates = this.isMine();
