@@ -22231,7 +22231,7 @@
 	                to = this.to;
 	
 	            from = from.getAttribute("position");
-	            to = to.getPosition("position");
+	            to = to.getAttribute("position");
 	            if (from.x != this.state.from.x || from.y != this.state.from.y || from.z != this.state.from.z) {
 	                this.animate(this.from.getAttribute("position"), this.to.getAttribute("position"));
 	            }
