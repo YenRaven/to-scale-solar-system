@@ -103,8 +103,6 @@ export default class Animator extends React.Component {
         this.doUpdates = this.isMine();
     }
 
-    shouldComponentUpdate(){}
-
     componentDidUpdate(){
         this.doUpdates = this.isMine();
         if(this.isMine()){

@@ -22281,9 +22281,6 @@
 	            this.doUpdates = this.isMine();
 	        }
 	    }, {
-	        key: 'shouldComponentUpdate',
-	        value: function shouldComponentUpdate() {}
-	    }, {
 	        key: 'componentDidUpdate',
 	        value: function componentDidUpdate() {
 	            this.doUpdates = this.isMine();
