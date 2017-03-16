@@ -98,8 +98,12 @@ export default class Animator extends React.Component {
             this.unwatch();
         }else{
             this.watch();
+            React.children.forEach(this.props.children, (child) => {
+                child.setState(child.state);
+            });
+            return false;
         }
-        return this.to.components.sync.isMine || false;
+        return true;
     }
 
     componentDidUpdate(){

@@ -22259,8 +22259,12 @@
 	                this.unwatch();
 	            } else {
 	                this.watch();
+	                _react2.default.children.forEach(this.props.children, function (child) {
+	                    child.setState(child.state);
+	                });
+	                return false;
 	            }
-	            return this.to.components.sync.isMine || false;
+	            return true;
 	        }
 	    }, {
 	        key: 'componentDidUpdate',
