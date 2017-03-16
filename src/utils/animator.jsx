@@ -20,11 +20,7 @@ export default class Animator extends React.Component {
             }
         }
 
-        this.animationState = {
-            cx:0,
-            cy:0,
-            cz:0
-        }
+        this.doUpdates = true;
     }
 
     componentWillMount() {
@@ -33,10 +29,22 @@ export default class Animator extends React.Component {
 
     render(){
         this.child = React.Children.only(this.props.children);
+        if(this.to && this.from){
+            let toPos = this.to.getAttribute("position");
+            let fromPos = this.from.getAttribute("position");
+        }
         return (
             <a-entity>
-                <a-entity id={`a-to-${animationId}`} ref={(el) => {this.to = el;}} position={`${this.state.to.x} ${this.state.to.y} ${this.state.to.z}`} sync sync-transform />
-                <a-entity id={`a-from-${animationId}`} ref={(el) => {this.from = el;}} position={`${this.state.from.x} ${this.state.from.y} ${this.state.from.z}`} sync sync-transform />
+                <a-entity id={`a-to-${animationId}`} ref={(el) => {this.to = el;}} position={
+                    this.doUpdates?
+                    `${this.state.to.x} ${this.state.to.y} ${this.state.to.z}`:
+                    `${toPos.x} ${toPos.y} ${toPos.z}`
+                } sync sync-transform />
+                <a-entity id={`a-from-${animationId}`} ref={(el) => {this.from = el;}} position={
+                    this.doUpdates?
+                    `${this.state.from.x} ${this.state.from.y} ${this.state.from.z}`:
+                    `${fromPos.x} ${fromPos.y} ${fromPos.z}`
+                } sync sync-transform />
                 {
                     React.cloneElement(this.child,
                         {
@@ -94,22 +102,20 @@ export default class Animator extends React.Component {
         return this.to && this.to.components.sync && this.to.components.sync.isMine;
     }
 
-    shouldComponentUpdate(){
-        if(this.to.components.sync.isMine){
-            this.unwatch();
-        }else{
-            this.watch();
-            this.child.setState(this.child.state);
-            return false;
-        }
-        return true;
+    componentDidMount(){
+        this.doUpdates = this.isMine();
     }
 
     componentDidUpdate(){
-        this.animate(
-            this.state.from,
-            this.state.to
-        );
+        this.doUpdates = this.isMine();
+        if(this.isMine()){
+            this.animate(
+                this.state.from,
+                this.state.to
+            );
+        }else{
+            this.watch();
+        }
     }
 
     componentWillUnmount(){

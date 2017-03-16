@@ -22170,11 +22170,7 @@
 	            }
 	        };
 	
-	        _this.animationState = {
-	            cx: 0,
-	            cy: 0,
-	            cz: 0
-	        };
+	        _this.doUpdates = true;
 	        return _this;
 	    }
 	
@@ -22189,15 +22185,19 @@
 	            var _this2 = this;
 	
 	            this.child = _react2.default.Children.only(this.props.children);
+	            if (this.to && this.from) {
+	                var _toPos = this.to.getAttribute("position");
+	                var _fromPos = this.from.getAttribute("position");
+	            }
 	            return _react2.default.createElement(
 	                'a-entity',
 	                null,
 	                _react2.default.createElement('a-entity', { id: 'a-to-' + animationId, ref: function ref(el) {
 	                        _this2.to = el;
-	                    }, position: this.state.to.x + ' ' + this.state.to.y + ' ' + this.state.to.z, sync: true, 'sync-transform': true }),
+	                    }, position: this.doUpdates ? this.state.to.x + ' ' + this.state.to.y + ' ' + this.state.to.z : toPos.x + ' ' + toPos.y + ' ' + toPos.z, sync: true, 'sync-transform': true }),
 	                _react2.default.createElement('a-entity', { id: 'a-from-' + animationId, ref: function ref(el) {
 	                        _this2.from = el;
-	                    }, position: this.state.from.x + ' ' + this.state.from.y + ' ' + this.state.from.z, sync: true, 'sync-transform': true }),
+	                    }, position: this.doUpdates ? this.state.from.x + ' ' + this.state.from.y + ' ' + this.state.from.z : fromPos.x + ' ' + fromPos.y + ' ' + fromPos.z, sync: true, 'sync-transform': true }),
 	                _react2.default.cloneElement(this.child, {
 	                    ref: function ref(el) {
 	                        _this2.el = el;_this2.child.ref(el);
@@ -22254,21 +22254,19 @@
 	            return this.to && this.to.components.sync && this.to.components.sync.isMine;
 	        }
 	    }, {
-	        key: 'shouldComponentUpdate',
-	        value: function shouldComponentUpdate() {
-	            if (this.to.components.sync.isMine) {
-	                this.unwatch();
-	            } else {
-	                this.watch();
-	                this.child.setState(this.child.state);
-	                return false;
-	            }
-	            return true;
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.doUpdates = this.isMine();
 	        }
 	    }, {
 	        key: 'componentDidUpdate',
 	        value: function componentDidUpdate() {
-	            this.animate(this.state.from, this.state.to);
+	            this.doUpdates = this.isMine();
+	            if (this.isMine()) {
+	                this.animate(this.state.from, this.state.to);
+	            } else {
+	                this.watch();
+	            }
 	        }
 	    }, {
 	        key: 'componentWillUnmount',
