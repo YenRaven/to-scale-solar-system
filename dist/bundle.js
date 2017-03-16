@@ -22227,10 +22227,10 @@
 	    }, {
 	        key: 'watch',
 	        value: function watch() {
+	            var _this3 = this;
+	
 	            if (!this.observer) {
 	                this.observer = new MutationObserver(function (mutations) {
-	                    var _this3 = this;
-	
 	                    mutations.forEach(function (mutation) {
 	                        _this3.animate(_this3.from.getAttribute("position"), _this3.to.getAttribute("position"));
 	                    });

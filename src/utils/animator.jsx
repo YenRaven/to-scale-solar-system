@@ -68,7 +68,7 @@ export default class Animator extends React.Component {
 
     watch(){
         if(!this.observer){
-            this.observer = new MutationObserver(function(mutations) {
+            this.observer = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
                     this.animate(
                         this.from.getAttribute("position"),
