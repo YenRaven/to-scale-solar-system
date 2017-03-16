@@ -97,12 +97,12 @@ export default class Animator extends React.Component {
     }
 
     shouldComponentUpdate(){
-        return this.to.components.sync.isMine || false;
         if(this.to.components.sync.isMine){
             this.unwatch();
         }else{
             this.watch();
         }
+        return this.to.components.sync.isMine || false;
     }
 
     componentDidUpdate(){
