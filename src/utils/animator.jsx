@@ -67,29 +67,19 @@ export default class Animator extends React.Component {
     }
 
     watch(){
-        if(!this.observer){
-            this.observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    this.animate(
-                        this.from.getAttribute("position"),
-                        this.to.getAttribute("position")
-                    );
-                });
-            });
-
-            var config = { attributes: true, childList: false, characterData: false };
-
-            // pass in the target node, as well as the observer options
-            this.observer.observe(this.to, config);
-            //this.observer.observe(this.refs.from, config);
+        let {from, to} = this;
+        from = from.getAttribute("position");
+        to = to.getPosition("position");
+        if(from.x != this.state.from.x || from.y != this.state.from.y || from.z != this.state.from.z){
+            this.animate(
+                this.from.getAttribute("position"),
+                this.to.getAttribute("position")
+            )
         }
     }
 
     unwatch(){
-        if(this.observer){
-            this.observer.disconnect();
-            this.observer = null;
-        }
+
     }
 
     isMine(){

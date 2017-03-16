@@ -22227,30 +22227,18 @@
 	    }, {
 	        key: 'watch',
 	        value: function watch() {
-	            var _this3 = this;
+	            var from = this.from,
+	                to = this.to;
 	
-	            if (!this.observer) {
-	                this.observer = new MutationObserver(function (mutations) {
-	                    mutations.forEach(function (mutation) {
-	                        _this3.animate(_this3.from.getAttribute("position"), _this3.to.getAttribute("position"));
-	                    });
-	                });
-	
-	                var config = { attributes: true, childList: false, characterData: false };
-	
-	                // pass in the target node, as well as the observer options
-	                this.observer.observe(this.to, config);
-	                //this.observer.observe(this.refs.from, config);
+	            from = from.getAttribute("position");
+	            to = to.getPosition("position");
+	            if (from.x != this.state.from.x || from.y != this.state.from.y || from.z != this.state.from.z) {
+	                this.animate(this.from.getAttribute("position"), this.to.getAttribute("position"));
 	            }
 	        }
 	    }, {
 	        key: 'unwatch',
-	        value: function unwatch() {
-	            if (this.observer) {
-	                this.observer.disconnect();
-	                this.observer = null;
-	            }
-	        }
+	        value: function unwatch() {}
 	    }, {
 	        key: 'isMine',
 	        value: function isMine() {
