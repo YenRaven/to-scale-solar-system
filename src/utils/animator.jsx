@@ -98,7 +98,7 @@ export default class Animator extends React.Component {
             this.unwatch();
         }else{
             this.watch();
-            React.children.forEach(this.props.children, (child) => {
+            React.Children.forEach(this.props.children, (child) => {
                 child.setState(child.state);
             });
             return false;

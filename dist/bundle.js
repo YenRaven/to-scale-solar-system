@@ -22259,7 +22259,7 @@
 	                this.unwatch();
 	            } else {
 	                this.watch();
-	                _react2.default.children.forEach(this.props.children, function (child) {
+	                _react2.default.Children.forEach(this.props.children, function (child) {
 	                    child.setState(child.state);
 	                });
 	                return false;
