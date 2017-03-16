@@ -22188,6 +22188,7 @@
 	        value: function render() {
 	            var _this2 = this;
 	
+	            this.child = _react2.default.Children.only(this.props.children);
 	            return _react2.default.createElement(
 	                'a-entity',
 	                null,
@@ -22197,9 +22198,9 @@
 	                _react2.default.createElement('a-entity', { id: 'a-from-' + animationId, ref: function ref(el) {
 	                        _this2.from = el;
 	                    }, position: this.state.from.x + ' ' + this.state.from.y + ' ' + this.state.from.z, sync: true, 'sync-transform': true }),
-	                _react2.default.cloneElement(_react2.default.Children.only(this.props.children), {
+	                _react2.default.cloneElement(this.child, {
 	                    ref: function ref(el) {
-	                        _this2.el = el;_react2.default.Children.only(_this2.props.children).ref(el);
+	                        _this2.el = el;_this2.child.ref(el);
 	                    }
 	                })
 	            );
@@ -22259,9 +22260,7 @@
 	                this.unwatch();
 	            } else {
 	                this.watch();
-	                _react2.default.Children.forEach(this.props.children, function (child) {
-	                    child.setState(child.state);
-	                });
+	                this.child.setState(this.child.state);
 	                return false;
 	            }
 	            return true;

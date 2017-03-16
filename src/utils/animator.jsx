@@ -32,14 +32,15 @@ export default class Animator extends React.Component {
     }
 
     render(){
+        this.child = React.Children.only(this.props.children);
         return (
             <a-entity>
                 <a-entity id={`a-to-${animationId}`} ref={(el) => {this.to = el;}} position={`${this.state.to.x} ${this.state.to.y} ${this.state.to.z}`} sync sync-transform />
                 <a-entity id={`a-from-${animationId}`} ref={(el) => {this.from = el;}} position={`${this.state.from.x} ${this.state.from.y} ${this.state.from.z}`} sync sync-transform />
                 {
-                    React.cloneElement(React.Children.only(this.props.children),
+                    React.cloneElement(this.child,
                         {
-                            ref:(el) => {this.el = el; React.Children.only(this.props.children).ref(el);}
+                            ref:(el) => {this.el = el; this.child.ref(el);}
                         }
                     )
                 }
@@ -98,9 +99,7 @@ export default class Animator extends React.Component {
             this.unwatch();
         }else{
             this.watch();
-            React.Children.forEach(this.props.children, (child) => {
-                child.setState(child.state);
-            });
+            this.child.setState(this.child.state);
             return false;
         }
         return true;
