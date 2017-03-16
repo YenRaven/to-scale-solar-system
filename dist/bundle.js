@@ -22273,7 +22273,7 @@
 	    }, {
 	        key: 'isMine',
 	        value: function isMine() {
-	            return this.to && this.to.components.sync && this.to.components.sync.isMine;
+	            return this.to && this.to.el.components.sync && this.to.el.components.sync.isMine;
 	        }
 	    }, {
 	        key: 'componentDidMount',

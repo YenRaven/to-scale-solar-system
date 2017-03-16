@@ -96,7 +96,7 @@ export default class Animator extends React.Component {
     }
 
     isMine(){
-        return this.to && this.to.components.sync && this.to.components.sync.isMine;
+        return this.to && this.to.el.components.sync && this.to.el.components.sync.isMine;
     }
 
     componentDidMount(){
