@@ -22237,12 +22237,10 @@
 	            from = from.getAttribute("position");
 	            to = to.getAttribute("position");
 	            if (from.x != this.state.from.x || from.y != this.state.from.y || from.z != this.state.from.z) {
-	                this.animate(this.from.getAttribute("position"), this.to.getAttribute("position"));
-	                this.setState(function (state) {
-	                    return _extends({}, state, {
-	                        from: from,
-	                        to: to
-	                    });
+	                this.animate(from, to);
+	                this.state = _extends({}, this.state, {
+	                    from: from,
+	                    to: to
 	                });
 	            }
 	        }

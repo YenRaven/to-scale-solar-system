@@ -82,16 +82,14 @@ export default class Animator extends React.Component {
         to = to.getAttribute("position");
         if(from.x != this.state.from.x || from.y != this.state.from.y || from.z != this.state.from.z){
             this.animate(
-                this.from.getAttribute("position"),
-                this.to.getAttribute("position")
+                from,
+                to
             )
-            this.setState((state) => {
-                return {
-                    ...state,
-                    from,
-                    to
-                }
-            })
+            this.state = {
+                ...this.state,
+                from,
+                to
+            }
         }
     }
 
