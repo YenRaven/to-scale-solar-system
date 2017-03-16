@@ -152,7 +152,7 @@
 	        value: function componentWillUpdate(nextProps, nextState) {
 	            var targPos = void 0;
 	            var sysPos = void 0;
-	            if (this.sys && this.sys.components.sync && this.sys.components.sync.isMine) {
+	            if (this.refs.animator && this.refs.animator.isMine()) {
 	                targPos = this.refs[this.state.selected].refs.body.getPosition(nextState.calcBase);
 	                sysPos = this.refs.animator.state.to;
 	                targPos.x = -targPos.x;
@@ -22084,23 +22084,29 @@
 	    _createClass(Rings, [{
 	        key: 'render',
 	        value: function render() {
+	            var _this4 = this;
+	
 	            var size = this.props.radius * this.props.scale * 2;
 	            return _react2.default.createElement(
 	                'a-entity',
-	                null,
+	                { ref: function ref(el) {
+	                        _this4.containerEl = el;
+	                    } },
 	                _react2.default.createElement('a-image', {
+	                    key: 'top',
 	                    width: size,
 	                    height: size,
 	                    transparent: 'true',
 	                    rotation: this.props.rotationX + ' ' + this.props.rotationY + ' ' + this.props.rotationZ,
-	                    src: this.props.texture
+	                    src: this.props.texture ? this.props.texture : null
 	                }),
 	                _react2.default.createElement('a-image', {
+	                    key: 'btm',
 	                    width: size,
 	                    height: size,
 	                    transparent: 'true',
 	                    rotation: -this.props.rotationX + ' ' + this.props.rotationY + ' ' + this.props.rotationZ,
-	                    src: this.props.texture
+	                    src: this.props.texture ? this.props.texture : null
 	                })
 	            );
 	        }
@@ -22221,26 +22227,34 @@
 	    }, {
 	        key: 'watch',
 	        value: function watch() {
-	            this.observer = new MutationObserver(function (mutations) {
-	                var _this3 = this;
+	            if (!this.observer) {
+	                this.observer = new MutationObserver(function (mutations) {
+	                    var _this3 = this;
 	
-	                mutations.forEach(function (mutation) {
-	                    _this3.animate(_this3.from.getAttribute("position"), _this3.to.getAttribute("position"));
+	                    mutations.forEach(function (mutation) {
+	                        _this3.animate(_this3.from.getAttribute("position"), _this3.to.getAttribute("position"));
+	                    });
 	                });
-	            });
 	
-	            var config = { attributes: true, childList: false, characterData: false };
+	                var config = { attributes: true, childList: false, characterData: false };
 	
-	            // pass in the target node, as well as the observer options
-	            this.observer.observe(this.refs.to, config);
-	            //this.observer.observe(this.refs.from, config);
+	                // pass in the target node, as well as the observer options
+	                this.observer.observe(this.refs.to, config);
+	                //this.observer.observe(this.refs.from, config);
+	            }
 	        }
 	    }, {
 	        key: 'unwatch',
 	        value: function unwatch() {
 	            if (this.observer) {
 	                this.observer.disconnect();
+	                this.observer = null;
 	            }
+	        }
+	    }, {
+	        key: 'isMine',
+	        value: function isMine() {
+	            return this.to && this.to.components.sync && this.to.components.sync.isMine;
 	        }
 	    }, {
 	        key: 'shouldComponentUpdate',

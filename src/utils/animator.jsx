@@ -67,26 +67,33 @@ export default class Animator extends React.Component {
     }
 
     watch(){
-        this.observer = new MutationObserver(function(mutations) {
-            mutations.forEach((mutation) => {
-                this.animate(
-                    this.from.getAttribute("position"),
-                    this.to.getAttribute("position")
-                );
+        if(!this.observer){
+            this.observer = new MutationObserver(function(mutations) {
+                mutations.forEach((mutation) => {
+                    this.animate(
+                        this.from.getAttribute("position"),
+                        this.to.getAttribute("position")
+                    );
+                });
             });
-        });
 
-        var config = { attributes: true, childList: false, characterData: false };
+            var config = { attributes: true, childList: false, characterData: false };
 
-        // pass in the target node, as well as the observer options
-        this.observer.observe(this.refs.to, config);
-        //this.observer.observe(this.refs.from, config);
+            // pass in the target node, as well as the observer options
+            this.observer.observe(this.refs.to, config);
+            //this.observer.observe(this.refs.from, config);
+        }
     }
 
     unwatch(){
         if(this.observer){
             this.observer.disconnect();
+            this.observer = null;
         }
+    }
+
+    isMine(){
+        return this.to && this.to.components.sync && this.to.components.sync.isMine;
     }
 
     shouldComponentUpdate(){

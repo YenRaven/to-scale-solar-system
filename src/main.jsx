@@ -51,7 +51,7 @@ class Main extends React.Component {
     componentWillUpdate(nextProps, nextState){
         let targPos;
         let sysPos;
-        if(this.sys && this.sys.components.sync && this.sys.components.sync.isMine){
+        if(this.refs.animator && this.refs.animator.isMine()){
             targPos = this.refs[this.state.selected].refs.body.getPosition(nextState.calcBase);
             sysPos = this.refs.animator.state.to;
             targPos.x = -targPos.x;

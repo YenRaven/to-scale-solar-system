@@ -67,21 +67,23 @@ export class Rings extends React.Component {
     render() {
         let size = this.props.radius * this.props.scale * 2;
         return (
-            <a-entity>
-            <a-image
-                width={size}
-                height={size}
-                transparent="true"
-                rotation={`${this.props.rotationX} ${this.props.rotationY} ${this.props.rotationZ}`}
-                src={this.props.texture}
-            />
-            <a-image
-                width={size}
-                height={size}
-                transparent="true"
-                rotation={`${-this.props.rotationX} ${this.props.rotationY} ${this.props.rotationZ}`}
-                src={this.props.texture}
-            />
+            <a-entity ref={(el)=>{this.containerEl = el}}>
+                <a-image
+                    key="top"
+                    width={size}
+                    height={size}
+                    transparent="true"
+                    rotation={`${this.props.rotationX} ${this.props.rotationY} ${this.props.rotationZ}`}
+                    src={this.props.texture?this.props.texture:null}
+                />
+                <a-image
+                    key="btm"
+                    width={size}
+                    height={size}
+                    transparent="true"
+                    rotation={`${-this.props.rotationX} ${this.props.rotationY} ${this.props.rotationZ}`}
+                    src={this.props.texture?this.props.texture:null}
+                />
             </a-entity>
         )
     }
