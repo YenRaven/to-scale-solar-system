@@ -83,11 +83,7 @@ export default class Animator extends React.Component {
                 from,
                 to
             )
-            this.lastFrom = {
-                ...state,
-                from,
-                to
-            }
+            this.lastFrom = from;
         }
     }
 
