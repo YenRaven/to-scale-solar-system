@@ -75,6 +75,13 @@ export default class Animator extends React.Component {
                 this.from.getAttribute("position"),
                 this.to.getAttribute("position")
             )
+            this.setState((state) => {
+                return {
+                    ...state,
+                    from,
+                    to
+                }
+            })
         }
     }
 
