@@ -53,15 +53,15 @@ class Main extends React.Component {
                         <a-entity id="System"
                             position={this.refs.animator?`${this.refs.animator.state.to.x} 1.5 ${this.refs.animator.state.to.z}` : "0 1.5 0"}
                             ref={(system) => {this.sys = system;}}>
-                            <Sun texture="#sun" now={this.state.calcBase} ref="sun" {...scaleProps}  onClick={this.centerPlanet("sun")}/>
-                            <Mercury texture="#mercury" {...bodyProps} ref="mercury" onClick={this.centerPlanet("mercury")} />
-                            <Venus texture="#venus" {...bodyProps} ref="venus" onClick={this.centerPlanet("venus")}/>
-                            <Earth texture="#earth" {...bodyProps} ref="earth"  onClick={this.centerPlanet("earth")}/>
-                            <Mars texture="#mars" {...bodyProps} ref="mars"  onClick={this.centerPlanet("mars")}/>
-                            <Juipter texture="#jupiter" {...bodyProps} ref="jupiter" onClick={this.centerPlanet("jupiter")}/>
-                            <Saturn texture="#saturn" {...bodyProps} ref="saturn"  onClick={this.centerPlanet("saturn")}/>
-                            <Uranus texture="#uranus" {...bodyProps} ref="uranus"  onClick={this.centerPlanet("uranus")}/>
-                            <Neptune texture="#neptune" {...bodyProps} ref="neptune"  onClick={this.centerPlanet("neptune")}/>
+                            <Sun texture="#sun" now={this.state.calcBase} ref="sun" {...scaleProps} />
+                            <Mercury texture="#mercury" {...bodyProps} ref="mercury" />
+                            <Venus texture="#venus" {...bodyProps} ref="venus" />
+                            <Earth texture="#earth" {...bodyProps} ref="earth"  />
+                            <Mars texture="#mars" {...bodyProps} ref="mars"  />
+                            <Juipter texture="#jupiter" {...bodyProps} ref="jupiter" />
+                            <Saturn texture="#saturn" {...bodyProps} ref="saturn" />
+                            <Uranus texture="#uranus" {...bodyProps} ref="uranus" />
+                            <Neptune texture="#neptune" {...bodyProps} ref="neptune" />
                         </a-entity>
                     </Animator>
                 </a-entity>
@@ -79,8 +79,8 @@ class Main extends React.Component {
                         <TextControlBtn
                             width="0.9"
                             height="0.1"
-                            position={`${controls.x+0.4} ${controls.y+0.13} ${controls.z}`}
-                            value="Orbital Scale"
+                            position={{x:controls.x+0.4, y:controls.y+0.13, z:controls.z}}
+                            value={`Orbital Scale: ${this.state.orbitalScale}`}
                             color="#888888"
                             key="orbitBtn"
                             onClick={this.adjustOrbit}
@@ -168,18 +168,22 @@ class TextControlBtn extends React.Component {
         return (
             <a-plane
                 ref={(el)=>{this.el = el;}}
-                position={this.props.position}
+                position={`${this.props.position.x} ${this.props.position.y} ${this.props.position.z}`}
                 onClick={this.props.onClick}
                 color={this.props.color}
                 width={this.props.width}
                 height={this.props.height}
                 n-cockpit-parent
             >
+                <a-entity
+                    position="0 0 0.03"
+                    n-text={`text: ${this.props.value}; fontSize: 1; horizontalAlign: center;`}
+                    n-cockpit-parent
+                />
             </a-plane>
         )
     }
     componentDidMount(){
-        this.el.setAttribute("text", `color:white; align:center; value:${this.props.value}`)
         this.el.setAttribute("altspace-cursor-collider", "enabled: true");
     }
 }

@@ -173,23 +173,23 @@
 	                                ref: function ref(system) {
 	                                    _this2.sys = system;
 	                                } },
-	                            _react2.default.createElement(Sun, _extends({ texture: '#sun', now: this.state.calcBase, ref: 'sun' }, scaleProps, { onClick: this.centerPlanet("sun") })),
-	                            _react2.default.createElement(Mercury, _extends({ texture: '#mercury' }, bodyProps, { ref: 'mercury', onClick: this.centerPlanet("mercury") })),
-	                            _react2.default.createElement(Venus, _extends({ texture: '#venus' }, bodyProps, { ref: 'venus', onClick: this.centerPlanet("venus") })),
-	                            _react2.default.createElement(Earth, _extends({ texture: '#earth' }, bodyProps, { ref: 'earth', onClick: this.centerPlanet("earth") })),
-	                            _react2.default.createElement(Mars, _extends({ texture: '#mars' }, bodyProps, { ref: 'mars', onClick: this.centerPlanet("mars") })),
-	                            _react2.default.createElement(Juipter, _extends({ texture: '#jupiter' }, bodyProps, { ref: 'jupiter', onClick: this.centerPlanet("jupiter") })),
-	                            _react2.default.createElement(Saturn, _extends({ texture: '#saturn' }, bodyProps, { ref: 'saturn', onClick: this.centerPlanet("saturn") })),
-	                            _react2.default.createElement(Uranus, _extends({ texture: '#uranus' }, bodyProps, { ref: 'uranus', onClick: this.centerPlanet("uranus") })),
-	                            _react2.default.createElement(Neptune, _extends({ texture: '#neptune' }, bodyProps, { ref: 'neptune', onClick: this.centerPlanet("neptune") }))
+	                            _react2.default.createElement(Sun, _extends({ texture: '#sun', now: this.state.calcBase, ref: 'sun' }, scaleProps)),
+	                            _react2.default.createElement(Mercury, _extends({ texture: '#mercury' }, bodyProps, { ref: 'mercury' })),
+	                            _react2.default.createElement(Venus, _extends({ texture: '#venus' }, bodyProps, { ref: 'venus' })),
+	                            _react2.default.createElement(Earth, _extends({ texture: '#earth' }, bodyProps, { ref: 'earth' })),
+	                            _react2.default.createElement(Mars, _extends({ texture: '#mars' }, bodyProps, { ref: 'mars' })),
+	                            _react2.default.createElement(Juipter, _extends({ texture: '#jupiter' }, bodyProps, { ref: 'jupiter' })),
+	                            _react2.default.createElement(Saturn, _extends({ texture: '#saturn' }, bodyProps, { ref: 'saturn' })),
+	                            _react2.default.createElement(Uranus, _extends({ texture: '#uranus' }, bodyProps, { ref: 'uranus' })),
+	                            _react2.default.createElement(Neptune, _extends({ texture: '#neptune' }, bodyProps, { ref: 'neptune' }))
 	                        )
 	                    )
 	                ),
 	                this.state.user.isModerator ? [_react2.default.createElement(BodySelectControl, _extends({ src: '#sun', centerPlanet: this.centerPlanet("sun") }, controls, { key: 0 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#mercury', centerPlanet: this.centerPlanet("mercury") }, controls, { key: 1 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#venus', centerPlanet: this.centerPlanet("venus") }, controls, { key: 2 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#earth', centerPlanet: this.centerPlanet("earth") }, controls, { key: 3 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#mars', centerPlanet: this.centerPlanet("mars") }, controls, { key: 4 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#jupiter', centerPlanet: this.centerPlanet("jupiter") }, controls, { key: 5 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#saturn', centerPlanet: this.centerPlanet("saturn") }, controls, { key: 6 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#uranus', centerPlanet: this.centerPlanet("uranus") }, controls, { key: 7 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#neptune', centerPlanet: this.centerPlanet("neptune") }, controls, { key: 8 })), _react2.default.createElement(TextControlBtn, {
 	                    width: '0.9',
 	                    height: '0.1',
-	                    position: controls.x + 0.4 + ' ' + (controls.y + 0.13) + ' ' + controls.z,
-	                    value: 'Orbital Scale',
+	                    position: { x: controls.x + 0.4, y: controls.y + 0.13, z: controls.z },
+	                    value: 'Orbital Scale: ' + this.state.orbitalScale,
 	                    color: '#888888',
 	                    key: 'orbitBtn',
 	                    onClick: this.adjustOrbit
@@ -292,22 +292,29 @@
 	        value: function render() {
 	            var _this7 = this;
 	
-	            return _react2.default.createElement('a-plane', {
-	                ref: function ref(el) {
-	                    _this7.el = el;
+	            return _react2.default.createElement(
+	                'a-plane',
+	                {
+	                    ref: function ref(el) {
+	                        _this7.el = el;
+	                    },
+	                    position: this.props.position.x + ' ' + this.props.position.y + ' ' + this.props.position.z,
+	                    onClick: this.props.onClick,
+	                    color: this.props.color,
+	                    width: this.props.width,
+	                    height: this.props.height,
+	                    'n-cockpit-parent': true
 	                },
-	                position: this.props.position,
-	                onClick: this.props.onClick,
-	                color: this.props.color,
-	                width: this.props.width,
-	                height: this.props.height,
-	                'n-cockpit-parent': true
-	            });
+	                _react2.default.createElement('a-entity', {
+	                    position: '0 0 0.03',
+	                    'n-text': 'text: ' + this.props.value + '; fontSize: 1; horizontalAlign: center;',
+	                    'n-cockpit-parent': true
+	                })
+	            );
 	        }
 	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            this.el.setAttribute("text", 'color:white; align:center; value:' + this.props.value);
 	            this.el.setAttribute("altspace-cursor-collider", "enabled: true");
 	        }
 	    }]);
