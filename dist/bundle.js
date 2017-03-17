@@ -22197,6 +22197,7 @@
 	        };
 	
 	        _this3.lastFrom = _this3.state.from;
+	        _this3.watching = false;
 	        return _this3;
 	    }
 	
@@ -22252,34 +22253,40 @@
 	    }, {
 	        key: 'watch',
 	        value: function watch() {
-	            var from = this.from,
-	                to = this.to;
+	            var _this5 = this;
 	
-	            from = from.el.getAttribute("position");
-	            to = to.el.getAttribute("position");
-	            if (from.x != this.lastFrom.x || from.y != this.lastFrom.y || from.z != this.lastFrom.z) {
-	                this.animate(from, to);
-	                this.lastFrom = from;
+	            if (!this.watching) {
+	                this.watching = setInterval(function () {
+	                    var from = _this5.from,
+	                        to = _this5.to;
+	
+	                    from = from.el.getAttribute("position");
+	                    to = to.el.getAttribute("position");
+	                    if (from.x != _this5.lastFrom.x || from.y != _this5.lastFrom.y || from.z != _this5.lastFrom.z) {
+	                        _this5.animate(from, to);
+	                        _this5.lastFrom = from;
+	                    }
+	                }, 100);
 	            }
 	        }
 	    }, {
 	        key: 'unwatch',
-	        value: function unwatch() {}
+	        value: function unwatch() {
+	            if (this.watching) {
+	                clearInterval(this.watching);
+	                this.watching = false;
+	            }
+	        }
 	    }, {
 	        key: 'isMine',
 	        value: function isMine() {
 	            return this.to && this.to.el.components.sync && this.to.el.components.sync.isMine;
 	        }
 	    }, {
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            this.doUpdates = this.isMine();
-	        }
-	    }, {
 	        key: 'componentDidUpdate',
 	        value: function componentDidUpdate() {
-	            this.doUpdates = this.isMine();
 	            if (this.isMine()) {
+	                this.unwatch();
 	                this.animate(this.state.from, this.state.to);
 	            } else {
 	                this.watch();
@@ -22288,8 +22295,8 @@
 	    }, {
 	        key: 'componentWillUnmount',
 	        value: function componentWillUnmount() {
-	            if (this.observer) {
-	                this.observer.disconnect();
+	            if (this.watching) {
+	                this.unwatch();
 	            }
 	        }
 	    }]);

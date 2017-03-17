@@ -32,6 +32,7 @@ export default class Animator extends React.Component {
         }
 
         this.lastFrom = this.state.from;
+        this.watching = false;
     }
 
     componentWillMount() {
@@ -75,33 +76,36 @@ export default class Animator extends React.Component {
     }
 
     watch(){
-        let {from, to} = this;
-        from = from.el.getAttribute("position");
-        to = to.el.getAttribute("position");
-        if(from.x != this.lastFrom.x || from.y != this.lastFrom.y || from.z != this.lastFrom.z){
-            this.animate(
-                from,
-                to
-            )
-            this.lastFrom = from;
+        if(!this.watching){
+            this.watching = setInterval(()=>{
+                let {from, to} = this;
+                from = from.el.getAttribute("position");
+                to = to.el.getAttribute("position");
+                if(from.x != this.lastFrom.x || from.y != this.lastFrom.y || from.z != this.lastFrom.z){
+                    this.animate(
+                        from,
+                        to
+                    )
+                    this.lastFrom = from;
+                }
+            }, 100);
         }
     }
 
     unwatch(){
-
+        if(this.watching){
+            clearInterval(this.watching);
+            this.watching = false;
+        }
     }
 
     isMine(){
         return this.to && this.to.el.components.sync && this.to.el.components.sync.isMine;
     }
 
-    componentDidMount(){
-        this.doUpdates = this.isMine();
-    }
-
     componentDidUpdate(){
-        this.doUpdates = this.isMine();
         if(this.isMine()){
+            this.unwatch();
             this.animate(
                 this.state.from,
                 this.state.to
@@ -112,8 +116,8 @@ export default class Animator extends React.Component {
     }
 
     componentWillUnmount(){
-        if(this.observer){
-            this.observer.disconnect();
+        if(this.watching){
+            this.unwatch();
         }
     }
 }
