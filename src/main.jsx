@@ -75,15 +75,29 @@ class Main extends React.Component {
                         <BodySelectControl src="#jupiter"  centerPlanet={this.centerPlanet("jupiter")} {...controls} key={5}/>,
                         <BodySelectControl src="#saturn"  centerPlanet={this.centerPlanet("saturn")} {...controls} key={6}/>,
                         <BodySelectControl src="#uranus"  centerPlanet={this.centerPlanet("uranus")} {...controls} key={7}/>,
-                        <BodySelectControl src="#neptune"  centerPlanet={this.centerPlanet("neptune")} {...controls} key={8}/>
+                        <BodySelectControl src="#neptune"  centerPlanet={this.centerPlanet("neptune")} {...controls} key={8}/>,
+                        <TextControlBtn
+                            width="0.9"
+                            height="0.1"
+                            position={`${controls.x+0.4} ${controls.y+0.13} ${controls.z}`}
+                            value="Orbital Scale"
+                            color="#888888"
+                            key="orbitBtn"
+                            onClick={this.adjustOrbit}
+                        />
                     ]:null
                 }
             </a-scene>
         )
     }
 
-    eventTest = ()=>{
-        console.log("PING!!!");
+    adjustOrbit = () => {
+        this.setState((state) =>{
+            return {
+                ...state,
+                orbitalScale: state.orbitalScale>=1?0.001:state.orbitalScale*10
+            }
+        })
     }
     centerPlanet = (ref) => () => {
         console.log(ref);
@@ -145,6 +159,27 @@ class BodySelectControl extends React.Component {
         )
     }
     componentDidMount(){
+        this.el.setAttribute("altspace-cursor-collider", "enabled: true");
+    }
+}
+
+class TextControlBtn extends React.Component {
+    render(){
+        return (
+            <a-plane
+                ref={(el)=>{this.el = el;}}
+                position={this.props.position}
+                onClick={this.props.onClick}
+                color={this.props.color}
+                width={this.props.width}
+                height={this.props.height}
+                n-cockpit-parent
+            >
+            </a-plane>
+        )
+    }
+    componentDidMount(){
+        this.el.setAttribute("text", `color:white; align:center; value:${this.props.value}`)
         this.el.setAttribute("altspace-cursor-collider", "enabled: true");
     }
 }

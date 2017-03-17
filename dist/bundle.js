@@ -91,8 +91,12 @@
 	
 	        var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
 	
-	        _this.eventTest = function () {
-	            console.log("PING!!!");
+	        _this.adjustOrbit = function () {
+	            _this.setState(function (state) {
+	                return _extends({}, state, {
+	                    orbitalScale: state.orbitalScale >= 1 ? 0.001 : state.orbitalScale * 10
+	                });
+	            });
 	        };
 	
 	        _this.centerPlanet = function (ref) {
@@ -181,7 +185,15 @@
 	                        )
 	                    )
 	                ),
-	                this.state.user.isModerator ? [_react2.default.createElement(BodySelectControl, _extends({ src: '#sun', centerPlanet: this.centerPlanet("sun") }, controls, { key: 0 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#mercury', centerPlanet: this.centerPlanet("mercury") }, controls, { key: 1 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#venus', centerPlanet: this.centerPlanet("venus") }, controls, { key: 2 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#earth', centerPlanet: this.centerPlanet("earth") }, controls, { key: 3 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#mars', centerPlanet: this.centerPlanet("mars") }, controls, { key: 4 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#jupiter', centerPlanet: this.centerPlanet("jupiter") }, controls, { key: 5 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#saturn', centerPlanet: this.centerPlanet("saturn") }, controls, { key: 6 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#uranus', centerPlanet: this.centerPlanet("uranus") }, controls, { key: 7 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#neptune', centerPlanet: this.centerPlanet("neptune") }, controls, { key: 8 }))] : null
+	                this.state.user.isModerator ? [_react2.default.createElement(BodySelectControl, _extends({ src: '#sun', centerPlanet: this.centerPlanet("sun") }, controls, { key: 0 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#mercury', centerPlanet: this.centerPlanet("mercury") }, controls, { key: 1 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#venus', centerPlanet: this.centerPlanet("venus") }, controls, { key: 2 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#earth', centerPlanet: this.centerPlanet("earth") }, controls, { key: 3 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#mars', centerPlanet: this.centerPlanet("mars") }, controls, { key: 4 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#jupiter', centerPlanet: this.centerPlanet("jupiter") }, controls, { key: 5 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#saturn', centerPlanet: this.centerPlanet("saturn") }, controls, { key: 6 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#uranus', centerPlanet: this.centerPlanet("uranus") }, controls, { key: 7 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#neptune', centerPlanet: this.centerPlanet("neptune") }, controls, { key: 8 })), _react2.default.createElement(TextControlBtn, {
+	                    width: '0.9',
+	                    height: '0.1',
+	                    position: controls.x + 0.4 + ' ' + (controls.y + 0.13) + ' ' + controls.z,
+	                    value: 'Orbital Scale',
+	                    color: '#888888',
+	                    key: 'orbitBtn',
+	                    onClick: this.adjustOrbit
+	                })] : null
 	            );
 	        }
 	    }, {
@@ -266,8 +278,45 @@
 	    return BodySelectControl;
 	}(_react2.default.Component);
 	
-	var Assets = function (_React$Component3) {
-	    _inherits(Assets, _React$Component3);
+	var TextControlBtn = function (_React$Component3) {
+	    _inherits(TextControlBtn, _React$Component3);
+	
+	    function TextControlBtn() {
+	        _classCallCheck(this, TextControlBtn);
+	
+	        return _possibleConstructorReturn(this, (TextControlBtn.__proto__ || Object.getPrototypeOf(TextControlBtn)).apply(this, arguments));
+	    }
+	
+	    _createClass(TextControlBtn, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this7 = this;
+	
+	            return _react2.default.createElement('a-plane', {
+	                ref: function ref(el) {
+	                    _this7.el = el;
+	                },
+	                position: this.props.position,
+	                onClick: this.props.onClick,
+	                color: this.props.color,
+	                width: this.props.width,
+	                height: this.props.height,
+	                'n-cockpit-parent': true
+	            });
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.el.setAttribute("text", 'color:white; align:center; value:' + this.props.value);
+	            this.el.setAttribute("altspace-cursor-collider", "enabled: true");
+	        }
+	    }]);
+	
+	    return TextControlBtn;
+	}(_react2.default.Component);
+	
+	var Assets = function (_React$Component4) {
+	    _inherits(Assets, _React$Component4);
 	
 	    function Assets() {
 	        _classCallCheck(this, Assets);
@@ -299,8 +348,8 @@
 	    return Assets;
 	}(_react2.default.Component);
 	
-	var Sky = function (_React$Component4) {
-	    _inherits(Sky, _React$Component4);
+	var Sky = function (_React$Component5) {
+	    _inherits(Sky, _React$Component5);
 	
 	    function Sky() {
 	        _classCallCheck(this, Sky);
