@@ -1,27 +1,9 @@
 <!DOCTYPE html>
 <head>
     <script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
-    <script src="https://sdk.altvr.com/libs/altspace.js/2.0.3/altspace.min.js"></script>
+    <script src="https://sdk.altvr.com/libs/altspace.js/2.0.3/altspace.js"></script>
 </head>
 <body>
-    <a-scene altspace='vertical-align: bottom; fullspace: true;' sync-system='app: myapp; author: YenRaven'>
-        <a-assets>
-            <img id="sky" src="assets/eso0932a.jpg" />
-            <img id="sun" src="assets/sun.jpg" />
-            <img id="mercury" src="assets/mercury.jpg" />
-            <img id="venus" src="assets/venus.jpg" />
-            <img id="earth" src="assets/earth.jpg" />
-            <img id="mars" src="assets/mars.jpg" />
-            <img id="juipter" src="assets/juipter.jpg" />
-            <img id="saturn" src="assets/saturn.jpg" />
-            <img id="saturnRings" src="assets/saturn-rings.png" />
-            <img id="uranus" src="assets/uranus.jpg" />
-            <img id="neptune" src="assets/neptune.jpg" />
-        </a-assets>
-        <a-sky src='#sky' radius='2400'></a-sky>
-        <a-entity  position="0 360 -2" id="appMain">
-
-        </a-entity>
-    </a-scene>
+    <div id="appMain"></div>
     <script src="./bundle.js"></script>
 </body>

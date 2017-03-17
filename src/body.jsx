@@ -26,6 +26,7 @@ export class Body extends React.Component {
                     material={this.props.texture?`src: ${this.props.texture}`:null}
                     segments-height={_LOD}
                     segments-width={_LOD}
+                    onClick={this.props.onClick}
                 >
                     {this.props.children}
                 </a-sphere>

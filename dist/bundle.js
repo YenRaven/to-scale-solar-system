@@ -91,12 +91,28 @@
 	
 	        var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
 	
+	        _this.eventTest = function () {
+	            console.log("PING!!!");
+	        };
+	
+	        _this.centerPlanet = function (ref) {
+	            return function () {
+	                console.log(ref);
+	                _this.setState({ centered: ref });
+	            };
+	        };
+	
 	        _this.state = {
 	            calcBase: 0,
-	            selected: "earth",
+	            centered: "earth",
 	            scale: 0.00001,
-	            orbitalScale: 0.001
+	            orbitalScale: 0.001,
+	            user: {}
 	        };
+	        console.log("Initializing!");
+	        altspace.getUser().then(function (user) {
+	            _this.setState({ user: user });
+	        });
 	        return _this;
 	    }
 	
@@ -125,26 +141,47 @@
 	                parentRadius: 695700
 	            });
 	
+	            var controls = {
+	                x: -1,
+	                y: 0.5,
+	                z: -1.5,
+	                selectBody: {
+	                    width: 0.1,
+	                    height: 0.1
+	                }
+	            };
+	
 	            return _react2.default.createElement(
-	                _animator2.default,
-	                { ref: 'animator', animationTime: 1000 },
+	                'a-scene',
+	                { altspace: 'vertical-align: middle; fullspace: true;', 'sync-system': 'app: myapp; author: YenRaven' },
+	                _react2.default.createElement(Assets, null),
+	                _react2.default.createElement(Sky, null),
 	                _react2.default.createElement(
 	                    'a-entity',
-	                    { id: 'System',
-	                        position: this.refs.animator ? this.refs.animator.state.to.x + ' 1.5 ' + this.refs.animator.state.to.z : "0 1.5 0",
-	                        ref: function ref(system) {
-	                            _this2.sys = system;
-	                        } },
-	                    _react2.default.createElement(Sun, _extends({ texture: '#sun', now: this.state.calcBase, ref: 'sun' }, scaleProps)),
-	                    _react2.default.createElement(Mercury, _extends({ texture: '#mercury' }, bodyProps, { ref: 'mercury' })),
-	                    _react2.default.createElement(Venus, _extends({ texture: '#venus' }, bodyProps, { ref: 'venus' })),
-	                    _react2.default.createElement(Earth, _extends({ texture: '#earth' }, bodyProps, { ref: 'earth' })),
-	                    _react2.default.createElement(Mars, _extends({ texture: '#mars' }, bodyProps, { ref: 'mars' })),
-	                    _react2.default.createElement(Juipter, _extends({ texture: '#juipter' }, bodyProps, { ref: 'juipter' })),
-	                    _react2.default.createElement(Saturn, _extends({ texture: '#saturn' }, bodyProps, { ref: 'saturn' })),
-	                    _react2.default.createElement(Uranus, _extends({ texture: '#uranus' }, bodyProps, { ref: 'uranus' })),
-	                    _react2.default.createElement(Neptune, _extends({ texture: '#neptune' }, bodyProps, { ref: 'neptune' }))
-	                )
+	                    { position: '0 0 -2' },
+	                    _react2.default.createElement(
+	                        _animator2.default,
+	                        { ref: 'animator', animationTime: 1000 },
+	                        _react2.default.createElement(
+	                            'a-entity',
+	                            { id: 'System',
+	                                position: this.refs.animator ? this.refs.animator.state.to.x + ' 1.5 ' + this.refs.animator.state.to.z : "0 1.5 0",
+	                                ref: function ref(system) {
+	                                    _this2.sys = system;
+	                                } },
+	                            _react2.default.createElement(Sun, _extends({ texture: '#sun', now: this.state.calcBase, ref: 'sun' }, scaleProps, { onClick: this.centerPlanet("sun") })),
+	                            _react2.default.createElement(Mercury, _extends({ texture: '#mercury' }, bodyProps, { ref: 'mercury', onClick: this.centerPlanet("mercury") })),
+	                            _react2.default.createElement(Venus, _extends({ texture: '#venus' }, bodyProps, { ref: 'venus', onClick: this.centerPlanet("venus") })),
+	                            _react2.default.createElement(Earth, _extends({ texture: '#earth' }, bodyProps, { ref: 'earth', onClick: this.centerPlanet("earth") })),
+	                            _react2.default.createElement(Mars, _extends({ texture: '#mars' }, bodyProps, { ref: 'mars', onClick: this.centerPlanet("mars") })),
+	                            _react2.default.createElement(Juipter, _extends({ texture: '#jupiter' }, bodyProps, { ref: 'jupiter', onClick: this.centerPlanet("jupiter") })),
+	                            _react2.default.createElement(Saturn, _extends({ texture: '#saturn' }, bodyProps, { ref: 'saturn', onClick: this.centerPlanet("saturn") })),
+	                            _react2.default.createElement(Uranus, _extends({ texture: '#uranus' }, bodyProps, { ref: 'uranus', onClick: this.centerPlanet("uranus") })),
+	                            _react2.default.createElement(Neptune, _extends({ texture: '#neptune' }, bodyProps, { ref: 'neptune', onClick: this.centerPlanet("neptune") }))
+	                        )
+	                    )
+	                ),
+	                this.state.user.isModerator ? [_react2.default.createElement(BodySelectControl, _extends({ src: '#sun', centerPlanet: this.centerPlanet("sun") }, controls, { key: 0 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#mercury', centerPlanet: this.centerPlanet("mercury") }, controls, { key: 1 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#venus', centerPlanet: this.centerPlanet("venus") }, controls, { key: 2 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#earth', centerPlanet: this.centerPlanet("earth") }, controls, { key: 3 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#mars', centerPlanet: this.centerPlanet("mars") }, controls, { key: 4 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#jupiter', centerPlanet: this.centerPlanet("jupiter") }, controls, { key: 5 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#saturn', centerPlanet: this.centerPlanet("saturn") }, controls, { key: 6 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#uranus', centerPlanet: this.centerPlanet("uranus") }, controls, { key: 7 })), _react2.default.createElement(BodySelectControl, _extends({ src: '#neptune', centerPlanet: this.centerPlanet("neptune") }, controls, { key: 8 }))] : null
 	            );
 	        }
 	    }, {
@@ -153,7 +190,7 @@
 	            var targPos = void 0;
 	            var sysPos = void 0;
 	            if (this.refs.animator && this.refs.animator.isMine()) {
-	                targPos = this.refs[this.state.selected].refs.body.getPosition(nextState.calcBase);
+	                targPos = this.refs[this.state.centered].refs.body.getPosition(nextState.calcBase);
 	                sysPos = this.refs.animator.state.to;
 	                targPos.x = -targPos.x;
 	                targPos.z = -targPos.z;
@@ -186,6 +223,99 @@
 	    }]);
 	
 	    return Main;
+	}(_react2.default.Component);
+	
+	var bodySelectControlCount = 0;
+	
+	var BodySelectControl = function (_React$Component2) {
+	    _inherits(BodySelectControl, _React$Component2);
+	
+	    function BodySelectControl(props) {
+	        _classCallCheck(this, BodySelectControl);
+	
+	        var _this4 = _possibleConstructorReturn(this, (BodySelectControl.__proto__ || Object.getPrototypeOf(BodySelectControl)).call(this, props));
+	
+	        _this4.bodySelectControlCount = bodySelectControlCount++;
+	        return _this4;
+	    }
+	
+	    _createClass(BodySelectControl, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this5 = this;
+	
+	            return _react2.default.createElement('a-image', {
+	                ref: function ref(el) {
+	                    _this5.el = el;
+	                },
+	                width: this.props.selectBody.width,
+	                height: this.props.selectBody.height,
+	                position: this.props.x + this.props.selectBody.width * this.bodySelectControlCount + ' ' + this.props.y + ' ' + this.props.z,
+	                material: 'src:' + this.props.src,
+	                onClick: this.props.centerPlanet,
+	                'n-cockpit-parent': true
+	            });
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.el.setAttribute("altspace-cursor-collider", "enabled: true");
+	        }
+	    }]);
+	
+	    return BodySelectControl;
+	}(_react2.default.Component);
+	
+	var Assets = function (_React$Component3) {
+	    _inherits(Assets, _React$Component3);
+	
+	    function Assets() {
+	        _classCallCheck(this, Assets);
+	
+	        return _possibleConstructorReturn(this, (Assets.__proto__ || Object.getPrototypeOf(Assets)).apply(this, arguments));
+	    }
+	
+	    _createClass(Assets, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'a-assets',
+	                null,
+	                _react2.default.createElement('img', { id: 'sky', src: 'assets/eso0932a.jpg' }),
+	                _react2.default.createElement('img', { id: 'sun', src: 'assets/sun.jpg' }),
+	                _react2.default.createElement('img', { id: 'mercury', src: 'assets/mercury.jpg' }),
+	                _react2.default.createElement('img', { id: 'venus', src: 'assets/venus.jpg' }),
+	                _react2.default.createElement('img', { id: 'earth', src: 'assets/earth.jpg' }),
+	                _react2.default.createElement('img', { id: 'mars', src: 'assets/mars.jpg' }),
+	                _react2.default.createElement('img', { id: 'jupiter', src: 'assets/jupiter.jpg' }),
+	                _react2.default.createElement('img', { id: 'saturn', src: 'assets/saturn.jpg' }),
+	                _react2.default.createElement('img', { id: 'saturnRings', src: 'assets/saturn-rings.png' }),
+	                _react2.default.createElement('img', { id: 'uranus', src: 'assets/uranus.jpg' }),
+	                _react2.default.createElement('img', { id: 'neptune', src: 'assets/neptune.jpg' })
+	            );
+	        }
+	    }]);
+	
+	    return Assets;
+	}(_react2.default.Component);
+	
+	var Sky = function (_React$Component4) {
+	    _inherits(Sky, _React$Component4);
+	
+	    function Sky() {
+	        _classCallCheck(this, Sky);
+	
+	        return _possibleConstructorReturn(this, (Sky.__proto__ || Object.getPrototypeOf(Sky)).apply(this, arguments));
+	    }
+	
+	    _createClass(Sky, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement('a-sky', { src: '#sky', radius: '2000' });
+	        }
+	    }]);
+	
+	    return Sky;
 	}(_react2.default.Component);
 	
 	_reactDom2.default.render(_react2.default.createElement(Main, null), document.getElementById("appMain"));
@@ -21675,13 +21805,11 @@
 	                orbitalScale: this.props.orbitalScale
 	            };
 	            return _react2.default.createElement(_body.Body, _extends({
-	                texture: this.props.texture,
 	                ref: 'body',
-	                now: this.props.now,
 	                radius: 696342,
 	                color: '#FFFF00',
 	                orbitalDist: 0
-	            }, scaleProps));
+	            }, this.props, scaleProps));
 	        }
 	    }]);
 	
@@ -21706,14 +21834,11 @@
 	                orbitalScale: this.props.orbitalScale
 	            };
 	            return _react2.default.createElement(_body.Body, _extends({
-	                texture: this.props.texture,
 	                ref: 'body',
-	                now: this.props.now,
 	                radius: 2440,
 	                color: '#FF8800',
-	                orbitalDist: 46,
-	                parentRadius: this.props.parentRadius
-	            }, scaleProps));
+	                orbitalDist: 46
+	            }, this.props, scaleProps));
 	        }
 	    }]);
 	
@@ -21738,14 +21863,11 @@
 	                orbitalScale: this.props.orbitalScale
 	            };
 	            return _react2.default.createElement(_body.Body, _extends({
-	                texture: this.props.texture,
 	                ref: 'body',
-	                now: this.props.now,
 	                radius: 6052,
 	                color: '#8888FF',
-	                orbitalDist: 108,
-	                parentRadius: this.props.parentRadius
-	            }, scaleProps));
+	                orbitalDist: 108
+	            }, this.props, scaleProps));
 	        }
 	    }]);
 	
@@ -21770,14 +21892,11 @@
 	                orbitalScale: this.props.orbitalScale
 	            };
 	            return _react2.default.createElement(_body.Body, _extends({
-	                texture: this.props.texture,
 	                ref: 'body',
-	                now: this.props.now,
 	                radius: 6371,
 	                color: '#003399',
-	                orbitalDist: 149,
-	                parentRadius: this.props.parentRadius
-	            }, scaleProps));
+	                orbitalDist: 149
+	            }, this.props, scaleProps));
 	        }
 	    }]);
 	
@@ -21802,14 +21921,11 @@
 	                orbitalScale: this.props.orbitalScale
 	            };
 	            return _react2.default.createElement(_body.Body, _extends({
-	                texture: this.props.texture,
 	                ref: 'body',
-	                now: this.props.now,
 	                radius: 3389,
 	                color: '#FF4400',
-	                orbitalDist: 228,
-	                parentRadius: this.props.parentRadius
-	            }, scaleProps));
+	                orbitalDist: 228
+	            }, this.props, scaleProps));
 	        }
 	    }]);
 	
@@ -21834,14 +21950,11 @@
 	                orbitalScale: this.props.orbitalScale
 	            };
 	            return _react2.default.createElement(_body.Body, _extends({
-	                texture: this.props.texture,
 	                ref: 'body',
-	                now: this.props.now,
 	                radius: 69911,
 	                color: '#AA8800',
-	                orbitalDist: 778,
-	                parentRadius: this.props.parentRadius
-	            }, scaleProps));
+	                orbitalDist: 778
+	            }, this.props, scaleProps));
 	        }
 	    }]);
 	
@@ -21868,14 +21981,11 @@
 	            return _react2.default.createElement(
 	                _body.Body,
 	                _extends({
-	                    texture: this.props.texture,
 	                    ref: 'body',
-	                    now: this.props.now,
 	                    radius: 58232,
 	                    color: '#AA8899',
-	                    orbitalDist: 1400,
-	                    parentRadius: this.props.parentRadius
-	                }, scaleProps),
+	                    orbitalDist: 1400
+	                }, this.props, scaleProps),
 	                _react2.default.createElement(_body.Rings, _extends({
 	                    radius: 138232,
 	                    color: '#000000',
@@ -21909,14 +22019,11 @@
 	                orbitalScale: this.props.orbitalScale
 	            };
 	            return _react2.default.createElement(_body.Body, _extends({
-	                texture: this.props.texture,
 	                ref: 'body',
-	                now: this.props.now,
 	                radius: 25362,
 	                color: '#FF8800',
-	                orbitalDist: 2750,
-	                parentRadius: this.props.parentRadius
-	            }, scaleProps));
+	                orbitalDist: 2750
+	            }, this.props, scaleProps));
 	        }
 	    }]);
 	
@@ -21941,14 +22048,11 @@
 	                orbitalScale: this.props.orbitalScale
 	            };
 	            return _react2.default.createElement(_body.Body, _extends({
-	                texture: this.props.texture,
 	                ref: 'body',
-	                now: this.props.now,
 	                radius: 24622,
 	                color: '#0088FF',
-	                orbitalDist: 4500,
-	                parentRadius: this.props.parentRadius
-	            }, scaleProps));
+	                orbitalDist: 4500
+	            }, this.props, scaleProps));
 	        }
 	    }]);
 	
@@ -22032,7 +22136,8 @@
 	                        color: this.props.texture ? null : this.props.color,
 	                        material: this.props.texture ? 'src: ' + this.props.texture : null,
 	                        'segments-height': _LOD,
-	                        'segments-width': _LOD
+	                        'segments-width': _LOD,
+	                        onClick: this.props.onClick
 	                    },
 	                    this.props.children
 	                )
@@ -22166,7 +22271,7 @@
 	    }, {
 	        key: 'shouldComponentUpdate',
 	        value: function shouldComponentUpdate() {
-	            return this.el && this.el.components.sync.isMine;
+	            return this.el && this.el.components.sync && this.el.components.sync.isMine;
 	        }
 	    }]);
 	

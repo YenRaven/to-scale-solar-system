@@ -10,12 +10,11 @@ export class Sun extends React.Component {
             orbitalScale: this.props.orbitalScale
         };
         return (<Body
-            texture={this.props.texture}
             ref="body"
-            now={this.props.now}
             radius={696342}
             color="#FFFF00"
             orbitalDist={0}
+            {...this.props}
             {...scaleProps}
         />)
     }
@@ -29,13 +28,11 @@ export class Mercury extends React.Component {
             orbitalScale: this.props.orbitalScale
         };
         return (<Body
-            texture={this.props.texture}
             ref="body"
-            now={this.props.now}
             radius={2440}
             color="#FF8800"
             orbitalDist={46}
-            parentRadius={this.props.parentRadius}
+            {...this.props}
             {...scaleProps}
             />
         )
@@ -50,13 +47,11 @@ export class Venus extends React.Component {
             orbitalScale: this.props.orbitalScale
         };
         return (<Body
-            texture={this.props.texture}
             ref="body"
-            now={this.props.now}
             radius={6052}
             color="#8888FF"
             orbitalDist={108}
-            parentRadius={this.props.parentRadius}
+            {...this.props}
             {...scaleProps}
             />
         )
@@ -71,13 +66,11 @@ export class Earth extends React.Component {
             orbitalScale: this.props.orbitalScale
         };
         return (<Body
-            texture={this.props.texture}
             ref="body"
-            now={this.props.now}
             radius={6371}
             color="#003399"
             orbitalDist={149}
-            parentRadius={this.props.parentRadius}
+            {...this.props}
             {...scaleProps}
             />
         )
@@ -92,13 +85,11 @@ export class Mars extends React.Component {
             orbitalScale: this.props.orbitalScale
         };
         return (<Body
-            texture={this.props.texture}
             ref="body"
-            now={this.props.now}
             radius={3389}
             color="#FF4400"
             orbitalDist={228}
-            parentRadius={this.props.parentRadius}
+            {...this.props}
             {...scaleProps}
             />
         )
@@ -113,13 +104,11 @@ export class Juipter extends React.Component {
             orbitalScale: this.props.orbitalScale
         };
         return (<Body
-            texture={this.props.texture}
             ref="body"
-            now={this.props.now}
             radius={69911}
             color="#AA8800"
             orbitalDist={778}
-            parentRadius={this.props.parentRadius}
+            {...this.props}
             {...scaleProps}
             />
         )
@@ -134,13 +123,11 @@ export class Saturn extends React.Component {
             orbitalScale: this.props.orbitalScale
         };
         return (<Body
-            texture={this.props.texture}
             ref="body"
-            now={this.props.now}
             radius={58232}
             color="#AA8899"
             orbitalDist={1400}
-            parentRadius={this.props.parentRadius}
+            {...this.props}
             {...scaleProps}
             >
                 <Rings
@@ -165,13 +152,11 @@ export class Uranus extends React.Component {
             orbitalScale: this.props.orbitalScale
         };
         return (<Body
-            texture={this.props.texture}
             ref="body"
-            now={this.props.now}
             radius={25362}
             color="#FF8800"
             orbitalDist={2750}
-            parentRadius={this.props.parentRadius}
+            {...this.props}
             {...scaleProps}
             />
         )
@@ -186,13 +171,11 @@ export class Neptune extends React.Component {
             orbitalScale: this.props.orbitalScale
         };
         return (<Body
-            texture={this.props.texture}
             ref="body"
-            now={this.props.now}
             radius={24622}
             color="#0088FF"
             orbitalDist={4500}
-            parentRadius={this.props.parentRadius}
+            {...this.props}
             {...scaleProps}
             />
         )

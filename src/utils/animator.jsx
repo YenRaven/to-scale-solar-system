@@ -9,7 +9,7 @@ class AnimatorSync extends React.Component {
     }
 
     shouldComponentUpdate(){
-        return this.el && this.el.components.sync.isMine;
+        return this.el && this.el.components.sync && this.el.components.sync.isMine;
     }
 }
 
@@ -17,7 +17,6 @@ var animationId = 0;
 export default class Animator extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             to:{
                 x:0,
