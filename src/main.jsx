@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as Bodies from './bodies.jsx';
 import Animator from './utils/animator.jsx';
+var SimplexNoise = require('simplex-noise');
 
 class Main extends React.Component {
     constructor(props) {
@@ -189,11 +190,15 @@ class TextControlBtn extends React.Component {
 }
 
 class Assets extends React.Component {
+    constructor(props){
+        super(props);
+
+        this.simplex = new SimplexNoise()
+    }
     render(){
         return (
             <a-assets>
                 <img id="sky" src="assets/eso0932a.jpg" />
-                <img id="sun" src="assets/sun.jpg" />
                 <img id="mercury" src="assets/mercury.jpg" />
                 <img id="venus" src="assets/venus.jpg" />
                 <img id="earth" src="assets/earth.jpg" />
@@ -203,8 +208,65 @@ class Assets extends React.Component {
                 <img id="saturnRings" src="assets/saturn-rings.png" />
                 <img id="uranus" src="assets/uranus.jpg" />
                 <img id="neptune" src="assets/neptune.jpg" />
+                <canvas ref={(c) => {this.sunTexture = c}} id="sun" width={512} height={256} />
             </a-assets>
         )
+    }
+    componentDidMount(){
+        var width = 512;
+        var height = 256;
+        var sunTexture = this.sunTexture,
+        tctx = sunTexture.getContext('2d'),
+        sunImg = new Image();
+        sunImg.src = "assets/sun-small.jpg";
+        var sunSample = document.createElement('canvas')
+        sunSample.width = 1;
+        sunSample.height = 255;
+        var sctx = sunSample.getContext('2d'),
+        sample = sctx.getImageData(0, 0, 1, 255).data,
+        sImg = new Image()
+        sImg.onload = () => {
+            sctx.drawImage(sImg, 0, 0);
+            sample = sctx.getImageData(0, 0, 1, 255).data;
+        }
+        sImg.src = "assets/sun-sample.png";
+        var canvas = document.createElement('canvas')
+        canvas.width = 256;
+        canvas.height = 128;
+        var ctx = canvas.getContext('2d'),
+        imgdata = ctx.getImageData(0, 0, canvas.width, canvas.height),
+        data = imgdata.data,
+        t = 0;
+        let simplex = this.simplex;
+        setInterval(function(){
+            tctx.globalCompositeOperation = "source-over";
+            tctx.drawImage(sunImg, 0, 0, width, height);
+            tctx.globalCompositeOperation = "multiply";
+            for (var x = 0; x < 256; x++) {
+                for (var y = 0; y < 128; y++) {
+                    var r1 = simplex.noise3D(x / 32, y / 32, t / 64);
+                    var r2 = simplex.noise3D(x / 16, y / 16, t / 64);
+                    //var r3 = simplex.noise3D(x / 8, y / 8, t/64);
+                    //var r4 = simplex.noise3D(x / 4, y / 4, t/32);
+                    var b = (y * 256 + x) * 4;
+                    var c = ~~(
+                        (
+                            (
+                                r2* 0.5 + 0.5
+                            ) + (
+                                r1* 0.5 + 0.5
+                            )
+                        ) / 2 * 255);
+                    data[b + 0] = sample[c*4]
+                    data[b + 1] = sample[c*4+1]
+                    data[b + 2] = sample[c*4+2]
+                    data[b + 3] = 255;
+                }
+            }
+            t++;
+            ctx.putImageData(imgdata, 0, 0);
+            tctx.drawImage(canvas, 0, 0, width, height);
+        }, 100);
     }
 }
 
