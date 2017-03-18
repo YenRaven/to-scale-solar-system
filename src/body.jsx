@@ -16,7 +16,7 @@ export class Body extends React.Component {
     render() {
         let {x, y, z} = this.getPosition(this.props.now);
         return (
-            <Animator ref="animator" animationTime={1000}>
+            <Animator ref="animator" animationTime={1000} user={this.props.user}>
                 <a-sphere
                     ref={(geom) => {this.geom = geom;}}
                     id={this.state.id}

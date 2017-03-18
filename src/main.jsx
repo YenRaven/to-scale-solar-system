@@ -32,7 +32,8 @@ class Main extends React.Component {
         let bodyProps = {
             ...scaleProps,
             now: this.state.calcBase,
-            parentRadius: 695700
+            parentRadius: 695700,
+            user: this.state.user
         };
 
         let controls = {
@@ -49,12 +50,13 @@ class Main extends React.Component {
             <a-scene altspace='vertical-align: middle; fullspace: true;' sync-system='app: myapp; author: YenRaven'>
                 <Assets />
                 <Sky />
+                <a-entity position={`0 0 ${this.state.calcBase}`} ref={(el) => {this.calcBaseSync = el;}} sync sync-transform />
                 <a-entity  position="0 0 -2">
                     <Animator ref="animator" animationTime={1000}>
                         <a-entity id="System"
                             position={this.refs.animator?`${this.refs.animator.state.to.x} 1.5 ${this.refs.animator.state.to.z}` : "0 1.5 0"}
                             ref={(system) => {this.sys = system;}}>
-                            <Sun texture="#sun" now={this.state.calcBase} ref="sun" {...scaleProps} />
+                            <Sun texture="#sun" now={this.state.calcBase} ref="sun" {...scaleProps} user={this.state.user} />
                             <Mercury texture="#mercury" {...bodyProps} ref="mercury" />
                             <Venus texture="#venus" {...bodyProps} ref="venus" />
                             <Earth texture="#earth" {...bodyProps} ref="earth"  />
@@ -106,6 +108,7 @@ class Main extends React.Component {
     }
 
     componentWillUpdate(nextProps, nextState){
+        //animator
         let targPos;
         let sysPos;
         if(this.refs.animator && this.refs.animator.isMine()){
@@ -129,14 +132,26 @@ class Main extends React.Component {
     }
 
     componentDidMount(){
-      setInterval(()=>{
-          this.setState((state) => {
-              return {
-                  ...state,
-                  calcBase:state.calcBase+1
-              }
-          });
-      }, 1000);
+        setInterval(()=>{
+
+            var calcBase = this.state.calcBase;
+            if(this.calcBaseSync && this.calcBaseSync.components.sync){
+                if(!this.calcBaseSync.components.sync.isMine){
+                    calcBase = this.calcBaseSync.getAttribute("position").z;
+                }else{
+                    if(this.state.user.isModerator){
+                        this.calcBaseSync.components.sync.takeOwnership();
+                    }
+                }
+            }
+
+            this.setState((state) => {
+                return {
+                    ...state,
+                    calcBase:calcBase+1
+                }
+            });
+        }, 1000);
     }
 }
 

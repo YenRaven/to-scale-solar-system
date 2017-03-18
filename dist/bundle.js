@@ -144,7 +144,8 @@
 	            };
 	            var bodyProps = _extends({}, scaleProps, {
 	                now: this.state.calcBase,
-	                parentRadius: 695700
+	                parentRadius: 695700,
+	                user: this.state.user
 	            });
 	
 	            var controls = {
@@ -162,6 +163,9 @@
 	                { altspace: 'vertical-align: middle; fullspace: true;', 'sync-system': 'app: myapp; author: YenRaven' },
 	                _react2.default.createElement(Assets, null),
 	                _react2.default.createElement(Sky, null),
+	                _react2.default.createElement('a-entity', { position: '0 0 ' + this.state.calcBase, ref: function ref(el) {
+	                        _this2.calcBaseSync = el;
+	                    }, sync: true, 'sync-transform': true }),
 	                _react2.default.createElement(
 	                    'a-entity',
 	                    { position: '0 0 -2' },
@@ -175,7 +179,7 @@
 	                                ref: function ref(system) {
 	                                    _this2.sys = system;
 	                                } },
-	                            _react2.default.createElement(Sun, _extends({ texture: '#sun', now: this.state.calcBase, ref: 'sun' }, scaleProps)),
+	                            _react2.default.createElement(Sun, _extends({ texture: '#sun', now: this.state.calcBase, ref: 'sun' }, scaleProps, { user: this.state.user })),
 	                            _react2.default.createElement(Mercury, _extends({ texture: '#mercury' }, bodyProps, { ref: 'mercury' })),
 	                            _react2.default.createElement(Venus, _extends({ texture: '#venus' }, bodyProps, { ref: 'venus' })),
 	                            _react2.default.createElement(Earth, _extends({ texture: '#earth' }, bodyProps, { ref: 'earth' })),
@@ -201,6 +205,7 @@
 	    }, {
 	        key: 'componentWillUpdate',
 	        value: function componentWillUpdate(nextProps, nextState) {
+	            //animator
 	            var targPos = void 0;
 	            var sysPos = void 0;
 	            if (this.refs.animator && this.refs.animator.isMine()) {
@@ -227,9 +232,21 @@
 	            var _this3 = this;
 	
 	            setInterval(function () {
+	
+	                var calcBase = _this3.state.calcBase;
+	                if (_this3.calcBaseSync && _this3.calcBaseSync.components.sync) {
+	                    if (!_this3.calcBaseSync.components.sync.isMine) {
+	                        calcBase = _this3.calcBaseSync.getAttribute("position").z;
+	                    } else {
+	                        if (_this3.state.user.isModerator) {
+	                            _this3.calcBaseSync.components.sync.takeOwnership();
+	                        }
+	                    }
+	                }
+	
 	                _this3.setState(function (state) {
 	                    return _extends({}, state, {
-	                        calcBase: state.calcBase + 1
+	                        calcBase: calcBase + 1
 	                    });
 	                });
 	            }, 1000);
@@ -22239,7 +22256,7 @@
 	
 	            return _react2.default.createElement(
 	                _animator2.default,
-	                { ref: 'animator', animationTime: 1000 },
+	                { ref: 'animator', animationTime: 1000, user: this.props.user },
 	                _react2.default.createElement(
 	                    'a-sphere',
 	                    {
@@ -22385,6 +22402,15 @@
 	            return _react2.default.createElement('a-entity', { id: 'a-' + this.props.type + '-' + animationId, position: this.props.position.x + ' ' + this.props.position.y + ' ' + this.props.position.z, ref: function ref(el) {
 	                    _this2.el = el;
 	                }, sync: true, 'sync-transform': true });
+	        }
+	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {
+	            if (this.props.user.isModerator) {
+	                if (this.el && this.el.components.sync && this.el.components.sync.isMine) {
+	                    this.el.components.sync.takeOwnership();
+	                }
+	            }
 	        }
 	    }, {
 	        key: 'shouldComponentUpdate',

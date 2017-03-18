@@ -8,6 +8,14 @@ class AnimatorSync extends React.Component {
         return <a-entity id={`a-${this.props.type}-${animationId}`} position={`${this.props.position.x} ${this.props.position.y} ${this.props.position.z}`} ref={(el) => {this.el = el;}} sync sync-transform />
     }
 
+    componentDidUpdate(){
+        if(this.props.user.isModerator){
+            if(this.el && this.el.components.sync && this.el.components.sync.isMine){
+                this.el.components.sync.takeOwnership();
+            }
+        }
+    }
+
     shouldComponentUpdate(){
         return this.el && this.el.components.sync && this.el.components.sync.isMine;
     }
