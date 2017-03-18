@@ -9,7 +9,7 @@ class AnimatorSync extends React.Component {
     }
 
     componentDidUpdate(){
-        if(this.props.user.isModerator){
+        if(this.props.user && this.props.user.isModerator){
             if(this.el && this.el.components.sync && this.el.components.sync.isMine){
                 this.el.components.sync.takeOwnership();
             }
@@ -17,7 +17,7 @@ class AnimatorSync extends React.Component {
     }
 
     shouldComponentUpdate(){
-        return this.el && this.el.components.sync && this.el.components.sync.isMine;
+        return this.el && this.el.components.sync && this.el.components.sync.isMine || false;
     }
 }
 

@@ -163,7 +163,7 @@
 	                { altspace: 'vertical-align: middle; fullspace: true;', 'sync-system': 'app: myapp; author: YenRaven' },
 	                _react2.default.createElement(Assets, null),
 	                _react2.default.createElement(Sky, null),
-	                _react2.default.createElement('a-entity', { position: '0 0 ' + this.state.calcBase, ref: function ref(el) {
+	                _react2.default.createElement('a-entity', { id: 'calcBaseSync', position: '0 0 ' + this.state.calcBase, ref: function ref(el) {
 	                        _this2.calcBaseSync = el;
 	                    }, sync: true, 'sync-transform': true }),
 	                _react2.default.createElement(
@@ -408,18 +408,43 @@
 	                tctx.globalCompositeOperation = "source-over";
 	                tctx.drawImage(sunImg, 0, 0, width, height);
 	                tctx.globalCompositeOperation = "multiply";
-	                for (var x = 0; x < 256; x++) {
+	                for (var x = 0; x < 256 + 20; x++) {
 	                    for (var y = 0; y < 128; y++) {
 	                        var r1 = simplex.noise3D(x / 32, y / 32, t / 64);
 	                        var r2 = simplex.noise3D(x / 16, y / 16, t / 64);
 	                        //var r3 = simplex.noise3D(x / 8, y / 8, t/64);
 	                        //var r4 = simplex.noise3D(x / 4, y / 4, t/32);
-	                        var b = (y * 256 + x) * 4;
 	                        var c = ~~((r2 * 0.5 + 0.5 + (r1 * 0.5 + 0.5)) / 2 * 255);
-	                        data[b + 0] = sample[c * 4];
-	                        data[b + 1] = sample[c * 4 + 1];
-	                        data[b + 2] = sample[c * 4 + 2];
-	                        data[b + 3] = 255;
+	                        var cr = sample[c * 4],
+	                            cg = sample[c * 4 + 1],
+	                            cb = sample[c * 4 + 2];
+	
+	                        if (x < 10) {
+	                            var ab = (y * 256 + (x + 246)) * 4;
+	                            var ao = x / 10;
+	                            data[ab + 0] = cr * ao;
+	                            data[ab + 1] = cg * ao;
+	                            data[ab + 2] = cb * ao;
+	                        } else if (x >= 266) {
+	                            var eb = (y * 256 + (x - 266)) * 4;
+	                            var ea = (10 - (x - 266)) / 10;
+	                            data[eb + 0] += cr * ea;
+	                            data[eb + 1] += cg * ea;
+	                            data[eb + 2] += cb * ea;
+	                        } else {
+	                            var b = (y * 256 + (x - 10)) * 4;
+	                            if (x >= 256) {
+	                                data[b + 0] += cr;
+	                                data[b + 1] += cg;
+	                                data[b + 2] += cb;
+	                                data[b + 3] = 255;
+	                            } else {
+	                                data[b + 0] = cr;
+	                                data[b + 1] = cg;
+	                                data[b + 2] = cb;
+	                                data[b + 3] = 255;
+	                            }
+	                        }
 	                    }
 	                }
 	                t++;
@@ -22406,7 +22431,7 @@
 	    }, {
 	        key: 'componentDidUpdate',
 	        value: function componentDidUpdate() {
-	            if (this.props.user.isModerator) {
+	            if (this.props.user && this.props.user.isModerator) {
 	                if (this.el && this.el.components.sync && this.el.components.sync.isMine) {
 	                    this.el.components.sync.takeOwnership();
 	                }
@@ -22415,7 +22440,7 @@
 	    }, {
 	        key: 'shouldComponentUpdate',
 	        value: function shouldComponentUpdate() {
-	            return this.el && this.el.components.sync && this.el.components.sync.isMine;
+	            return this.el && this.el.components.sync && this.el.components.sync.isMine || false;
 	        }
 	    }]);
 	

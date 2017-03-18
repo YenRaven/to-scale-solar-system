@@ -33,7 +33,7 @@
   "dependencies": {
     "aframe": "^0.5.0",
     "aframe-react": "^3.5.0",
-    "altspace": "^0.6.0",
+    "altspace": "^0.6.2",
     "express": "^4.15.2",
     "fast-simplex-noise": "^3.2.0",
     "react": "^15.4.2",
