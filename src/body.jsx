@@ -35,16 +35,18 @@ export class Body extends React.Component {
     }
 
     componentWillUpdate(nextProps){
-        let newPos = this.getPosition(nextProps.now);
-        let oldPos = this.getPosition(this.props.now);
+        if(this.refs.animator.isMine()){
+            let newPos = this.getPosition(nextProps.now);
+            let oldPos = this.getPosition(this.props.now);
 
-        this.refs.animator.setState((state) => {
-            return {
-                ...state,
-                from: oldPos,
-                to: newPos
-            }
-        })
+            this.refs.animator.setState((state) => {
+                return {
+                    ...state,
+                    from: oldPos,
+                    to: newPos
+                }
+            })
+        }
 
     }
 

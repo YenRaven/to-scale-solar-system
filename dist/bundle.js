@@ -22262,15 +22262,17 @@
 	    }, {
 	        key: 'componentWillUpdate',
 	        value: function componentWillUpdate(nextProps) {
-	            var newPos = this.getPosition(nextProps.now);
-	            var oldPos = this.getPosition(this.props.now);
+	            if (this.refs.animator.isMine()) {
+	                var newPos = this.getPosition(nextProps.now);
+	                var oldPos = this.getPosition(this.props.now);
 	
-	            this.refs.animator.setState(function (state) {
-	                return _extends({}, state, {
-	                    from: oldPos,
-	                    to: newPos
+	                this.refs.animator.setState(function (state) {
+	                    return _extends({}, state, {
+	                        from: oldPos,
+	                        to: newPos
+	                    });
 	                });
-	            });
+	            }
 	        }
 	    }, {
 	        key: 'getPosition',
