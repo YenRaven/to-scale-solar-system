@@ -397,8 +397,8 @@
 	            };
 	            sImg.src = "assets/sun-sample.png";
 	            var canvas = document.createElement('canvas');
-	            canvas.width = 256;
-	            canvas.height = 128;
+	            canvas.width = 128;
+	            canvas.height = 64;
 	            var ctx = canvas.getContext('2d'),
 	                imgdata = ctx.getImageData(0, 0, canvas.width, canvas.height),
 	                data = imgdata.data,
@@ -408,8 +408,8 @@
 	                tctx.globalCompositeOperation = "source-over";
 	                tctx.drawImage(sunImg, 0, 0, width, height);
 	                tctx.globalCompositeOperation = "multiply";
-	                for (var x = 0; x < 256 + 20; x++) {
-	                    for (var y = 0; y < 128; y++) {
+	                for (var x = 0; x < canvas.width + 20; x++) {
+	                    for (var y = 0; y < canvas.height; y++) {
 	                        var r1 = simplex.noise3D(x / 32, y / 32, t / 64);
 	                        var r2 = simplex.noise3D(x / 16, y / 16, t / 64);
 	                        //var r3 = simplex.noise3D(x / 8, y / 8, t/64);
@@ -419,38 +419,26 @@
 	                            cg = sample[c * 4 + 1],
 	                            cb = sample[c * 4 + 2];
 	
-	                        if (x < 10) {
-	                            var ab = (y * 256 + (x + 246)) * 4;
-	                            var ao = x / 10;
-	                            data[ab + 0] = cr * ao;
-	                            data[ab + 1] = cg * ao;
-	                            data[ab + 2] = cb * ao;
-	                        } else if (x >= 266) {
-	                            var eb = (y * 256 + (x - 266)) * 4;
-	                            var ea = (10 - (x - 266)) / 10;
-	                            data[eb + 0] += cr * ea;
-	                            data[eb + 1] += cg * ea;
-	                            data[eb + 2] += cb * ea;
+	                        if (x >= canvas.width) {
+	                            var eb = (y * canvas.width + (x - canvas.width)) * 4;
+	                            var ea = (x - canvas.width) / 20;
+	                            var ed = 1 - ea;
+	                            data[eb] = data[eb] * ea + cr * ed;
+	                            data[eb + 1] = data[eb + 1] * ea + cg * ed;
+	                            data[eb + 2] = data[eb + 2] * ea + cb * ed;
 	                        } else {
-	                            var b = (y * 256 + (x - 10)) * 4;
-	                            if (x >= 256) {
-	                                data[b + 0] += cr;
-	                                data[b + 1] += cg;
-	                                data[b + 2] += cb;
-	                                data[b + 3] = 255;
-	                            } else {
-	                                data[b + 0] = cr;
-	                                data[b + 1] = cg;
-	                                data[b + 2] = cb;
-	                                data[b + 3] = 255;
-	                            }
+	                            var b = (y * canvas.width + x) * 4;
+	                            data[b] = cr;
+	                            data[b + 1] = cg;
+	                            data[b + 2] = cb;
+	                            data[b + 3] = 255;
 	                        }
 	                    }
 	                }
 	                t++;
 	                ctx.putImageData(imgdata, 0, 0);
 	                tctx.drawImage(canvas, 0, 0, width, height);
-	            }, 100);
+	            }, 1000 / 30);
 	        }
 	    }]);
 	
