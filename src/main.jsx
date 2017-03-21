@@ -256,7 +256,7 @@ class Assets extends React.Component {
         setInterval(function(){
             tctx.globalCompositeOperation = "source-over";
             tctx.drawImage(sunImg, 0, 0, width, height);
-            tctx.globalCompositeOperation = "multiply";
+            tctx.globalCompositeOperation = "overlay";
             for (var x = 0; x < canvas.width + 20; x++) {
                 for (var y = 0; y < canvas.height; y++) {
                     var r1 = simplex.noise3D(x / 32, y / 32, t / 64);
